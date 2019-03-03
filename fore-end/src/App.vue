@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div style="height: 100%">
     <router-view></router-view>
   </div>
 </template>
@@ -12,5 +12,9 @@ export default {
 </script>
 
 <style lang="scss">
-
+  body {
+    margin: 0;
+    padding: 0;
+    background-color: #F8F8F8!important;
+  }
 </style>
