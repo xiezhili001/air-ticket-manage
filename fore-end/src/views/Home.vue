@@ -10,7 +10,7 @@
       </el-header>
 
       <el-container>
-        <el-aside width="210px" class="aside">
+        <el-aside width="230px" class="aside">
           <div class="menu">
             菜单
             <span></span>
