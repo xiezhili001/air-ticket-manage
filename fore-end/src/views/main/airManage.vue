@@ -1,8 +1,8 @@
 <template>
   <div style="height: 100%" class="zl-airManage">
     <div class="header">中文名称:
-      <input type="text"> 编码:
-      <input type="text">&nbsp;
+      <el-input placeholder="请输入名称" v-model="name"></el-input>编码:
+      <el-input placeholder="请输入编码" v-model="code"></el-input>&nbsp;
       <el-button type="primary">查询</el-button>
       <el-button type="success">新增</el-button>
       <el-button type="danger">删除</el-button>
@@ -27,17 +27,16 @@
     </div>
 
     <div class="block paging">
-    <el-pagination
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-      :current-page.sync="currentPage3"
-      :page-sizes="[10, 20, 30, 40]"
-      :page-size="10"
-      layout="sizes, prev, pager, next, jumper"
-      :total="1000">
-    </el-pagination>
-  </div>
-
+      <el-pagination
+        @size-change="handleSizeChange"
+        @current-change="handleCurrentChange"
+        :current-page.sync="currentPage3"
+        :page-sizes="[10, 20, 30, 40]"
+        :page-size="10"
+        layout="sizes, prev, pager, next, jumper"
+        :total="1000"
+      ></el-pagination>
+    </div>
   </div>
 </template>
 <script>
@@ -45,6 +44,8 @@ export default {
   name: "SysRole",
   data() {
     return {
+      name: "",
+      code: "",
       tableData3: [
         {
           date: "2016-05-03",
@@ -134,7 +135,7 @@ export default {
         }
       ],
       multipleSelection: [],
-      currentPage3: 5,
+      currentPage3: 5
     };
   },
 
@@ -175,23 +176,41 @@ export default {
 
   .header {
     font-size: 14px;
-    height: 21px;
+
+    .el-input {
+      display: inline-block;
+      width: auto;
+    }
 
     input {
-      width: 100px;
-      height: 13px;
+      width: 120px;
+      height: 23px;
     }
   }
 
   .infoList {
     flex: 1;
     height: 100%;
-    overflow-y: auto
+    overflow-y: auto;
   }
 
-  .paging {
-    height: 32px;
+  .infoList::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
   }
-
+  .infoList::-webkit-scrollbar-track {
+    background: #ccc;
+    border-radius: 2px;
+  }
+  .infoList::-webkit-scrollbar-thumb {
+    background: #aaa;
+    border-radius: 2px;
+  }
+  .infoList::-webkit-scrollbar-thumb:hover {
+    background: #747474;
+  }
+  .infoList::-webkit-scrollbar-corner {
+    background: #f6f6f6;
+  }
 }
 </style>

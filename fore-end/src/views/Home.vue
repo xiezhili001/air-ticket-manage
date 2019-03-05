@@ -5,12 +5,14 @@
         <div class="fl tag">JTD.Admin</div>
         <div class="fr user">
           <span>匡珈萱，您好,欢迎登录</span>&nbsp;
-          <span>修改密码</span>
+          <span style="display: inline-block;">
+            <SetPassword></SetPassword>
+          </span>
         </div>
       </el-header>
 
       <el-container>
-        <el-aside width="230px" class="aside" @click="hideMenu" id="menu">
+        <el-aside width="230px" :class="aside" @click="hideMenu" id="menu">
           <div class="menu">
             菜单
             <i :class="[iconToggle,'iconStyle']" @click="hideMenu"></i>
@@ -18,7 +20,12 @@
           <el-collapse accordion class="menu-list">
             <el-collapse-item title="设置" name="1">
               <el-card class="box-card">
-                <div v-for="item in setList" :key="item.name" class="text item list-content" @click="goDetail(item.id)">
+                <div
+                  v-for="item in setList"
+                  :key="item.name"
+                  class="text item list-content"
+                  @click="goDetail(item.id)"
+                >
                   {{ item.name }}
                   <span class="el-icon-arrow-right showDetail"></span>
                 </div>
@@ -26,7 +33,12 @@
             </el-collapse-item>
             <el-collapse-item title="管理" name="2">
               <el-card class="box-card">
-                <div v-for="item in manageList" :key="item.name" class="text item list-content" @click="goDetail(item.id)">
+                <div
+                  v-for="item in manageList"
+                  :key="item.name"
+                  class="text item list-content"
+                  @click="goDetail(item.id)"
+                >
                   {{ item.name }}
                   <span class="el-icon-arrow-right showDetail"></span>
                 </div>
@@ -43,18 +55,20 @@
   </div>
 </template>
 <script>
-import Main from './main'
+import Main from "./main";
+import SetPassword from "./component/SetPassword.vue";
 export default {
   name: "Home",
   components: {
-    Main
+    Main,
+    SetPassword
   },
   data() {
     return {
       setList: [
         {
           name: "航司管理",
-          id: 'airManage'
+          id: "airManage"
         },
         {
           name: "返点管理",
@@ -93,8 +107,8 @@ export default {
           id: "integralAccount"
         },
         {
-           name: "机票订单",
-           id: "ticketOrder"
+          name: "机票订单",
+          id: "ticketOrder"
         },
         {
           name: "导入数据",
@@ -116,13 +130,11 @@ export default {
           name: "平台航司代码转换",
           id: "codeConversion"
         }
-
       ],
       manageList: [
         {
           name: "组织架构",
           id: "structure"
-
         },
         {
           name: "系统角色",
@@ -208,7 +220,7 @@ export default {
     },
     // main 页面跳转
     goDetail(id) {
-      this.$router.push({name: id});
+      this.$router.push({ name: id });
     }
   }
 };
@@ -218,6 +230,34 @@ export default {
 .zl-home {
   height: 100%;
   font-size: 16px;
+
+  .el-collapse-item__header {
+    background: rgb(246, 246, 246);
+  }
+
+  #menu::-webkit-scrollbar {
+    width: 4px;
+    height: 4px;
+  }
+  #menu::-webkit-scrollbar-track {
+    background: #ccc;
+    border-radius: 2px;
+  }
+  #menu::-webkit-scrollbar-thumb {
+    background: #aaa;
+    border-radius: 2px;
+  }
+  #menu::-webkit-scrollbar-thumb:hover {
+    background: #747474;
+  }
+  #menu::-webkit-scrollbar-corner {
+    background: #f6f6f6;
+  }
+
+  .el-table td,
+  .el-table th {
+    padding: 8px 0;
+  }
 
   .el-main {
     background-color: #fff;
@@ -231,7 +271,7 @@ export default {
 
   .iconStyle {
     float: right;
-    margin-right: 10px;
+    margin-right: 5px;
     margin-top: 5px;
     cursor: pointer;
   }
