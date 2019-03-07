@@ -12,7 +12,7 @@
       </el-header>
 
       <el-container>
-        <el-aside width="230px" :class="aside" @click="hideMenu" id="menu">
+        <el-aside width="230px" class="aside" @click="hideMenu" id="menu">
           <div class="menu">
             菜单
             <i :class="[iconToggle,'iconStyle']" @click="hideMenu"></i>
@@ -54,6 +54,7 @@
     </el-container>
   </div>
 </template>
+
 <script>
 import Main from "./main";
 import SetPassword from "./component/SetPassword.vue";
