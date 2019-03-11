@@ -17,6 +17,7 @@
             菜单
             <i :class="[iconToggle,'iconStyle']" @click="hideMenu"></i>
           </div>
+
           <el-collapse accordion class="menu-list">
             <el-collapse-item title="设置" name="1">
               <el-card class="box-card">
@@ -31,6 +32,7 @@
                 </div>
               </el-card>
             </el-collapse-item>
+
             <el-collapse-item title="管理" name="2">
               <el-card class="box-card">
                 <div
@@ -68,8 +70,12 @@ export default {
     return {
       setList: [
         {
+          name: "网站管理",
+          id: "webSiteManage"
+        },
+        {
           name: "航司管理",
-          id: "airManage"
+          id: "airCompanyManage"
         },
         {
           name: "返点管理",
@@ -130,6 +136,14 @@ export default {
         {
           name: "平台航司代码转换",
           id: "codeConversion"
+        },
+        {
+          name: "城市管理",
+          id: "cityMangae"
+        },
+        {
+          name: "国家管理",
+          id: "countryManage"
         }
       ],
       manageList: [
@@ -232,6 +246,20 @@ export default {
   height: 100%;
   font-size: 16px;
 
+  .list-content {
+    cursor: pointer;
+
+    &:visited {
+      color: red;
+    }
+    &:hover {
+      color: #409eff;
+    }
+
+    &:active {
+      color: blue;
+    }
+  }
   .el-collapse-item__header {
     background: rgb(246, 246, 246);
   }

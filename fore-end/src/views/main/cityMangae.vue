@@ -1,9 +1,9 @@
 <template>
-  <div style="height: 100%" class="zl-airportManage" v-loading="loading">
+  <div style="height: 100%" class="zl-airManage" v-loading="loading">
     <div class="header">
-      机场中文名称:
+      中文名称:
       <input type="text" v-model="name">
-      &nbsp;机场编码:
+      &nbsp;编码:
       <input type="text" v-model="code">
       &nbsp;
       <el-button type="primary" @click="query">查询</el-button>
@@ -20,13 +20,9 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column label="编码" prop="APCode"></el-table-column>
-        <el-table-column prop="APName" label="机场名称"></el-table-column>
-        <el-table-column prop="APNameShortest" label="中文简称"></el-table-column>
-        <el-table-column prop="APEnName" label="英文名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="APNameShortest" label="英文简称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="IsValid" label="是否可用" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="HvFlight" label="是否国际" show-overflow-tooltip></el-table-column>
+        <el-table-column label="编码" prop="CityCode"></el-table-column>
+        <el-table-column prop="CityName" label="中文名称" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="CityEnName" label="英文名称"></el-table-column>
         <el-table-column prop="LastUpdateTimeStamp" label="更新时间" show-overflow-tooltip></el-table-column>
         <el-table-column prop="Remark" label="备注" show-overflow-tooltip></el-table-column>
         <el-table-column label="操作" show-overflow-tooltip>
@@ -38,31 +34,15 @@
     </div>
 
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-      <el-input placeholder="请输入编码" v-model="APCode" clearable :disabled="disabled"></el-input>
-      <el-input placeholder="请输入航司名称" v-model="APName" clearable></el-input>
-      <el-input placeholder="请输入中文简称" v-model="APNameShort" clearable></el-input>
-      <el-input placeholder="请输入英文名称" v-model="APEnName" clearable></el-input>
-      <el-input placeholder="请输入英文简称" v-model="APEnNameShort" clearable></el-input>
-      <el-select v-model="IsValid" placeholder="请选择">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
-      <el-select v-model="HvFlight" placeholder="请选择">
-        <el-option
-          v-for="item in options"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        ></el-option>
-      </el-select>
+      <el-input placeholder="请输入编码" v-model="CityCode" clearable :disabled="disabled"></el-input>
+      <el-input placeholder="请输入航司名称" v-model="CityEnName" clearable></el-input>
+      <el-input placeholder="请输入中文简称" v-model="CityEnNameShort" clearable></el-input>
+      <el-input placeholder="请输入英文名称" v-model="CityName" clearable></el-input>
+      <el-input placeholder="请输入英文简称" v-model="CityNameShort" clearable></el-input>
       <el-input placeholder="备注" v-model="Remark" clearable></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false; confirm()">确 定</el-button>
+        <el-button type="primary" @click="dialogVisible = false; confirm(insertId)">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -82,89 +62,87 @@
 <script>
 import axios from "axios";
 export default {
-  name: "airportManage",
+  name: "airCompanyManage",
   data() {
     return {
-      title: "",
-      disabled: false,
       loading: false,
+      disabled: false,
+      title: "新增数据",
       name: "",
       code: "",
       tableData3: [],
       multipleSelection: [],
       dialogVisible: false,
+
       page: 1,
       pagesize: 10,
       total: 1,
-      APCode: "",
-      APName: "",
-      APNameShort: "",
-      APEnName: "",
-      APEnNameShort: "",
-      IsValid: "",
-      HvFlight: "",
+
+      CityCode: "",
+      CityEnName: "",
+      CityEnNameShort: "",
+      CityName: "",
+      CityNameShort: "",
       Remark: "",
-      options: [
-        {
-          value: "是",
-          label: "是"
-        },
-        {
-          value: "否",
-          label: "否"
-        }
-      ]
+      insertId: ""
     };
   },
 
   methods: {
+    // 消息提示
+    messagetips(message, type) {
+      this.$message({
+        duration: 1000,
+        message: message,
+        type: type
+      });
+    },
     // 新增数据-----------------------
     insert() {
+      this.disabled = false;
       this.title = "新增数据";
       this.dialogVisible = true;
-      this.disabled = false;
-      this.APCode = "";
-      this.APName = "";
-      this.APNameShort = "";
-      this.APEnName = "";
+      this.insertId = "";
+      this.CityCode = "";
+      this.CityEnName = "";
+      this.CityEnNameShort = "";
+      this.CityName = "";
       this.Remark = "";
-      this.APEnNameShort = "";
-      this.IsValid = "";
-      this.HvFlight = "";
+      this.CityNameShort = "";
     },
     // 修改数据
     fixData(row) {
-      this.title = "修改数据";
       this.disabled = true;
+      this.title = "修改数据";
       this.dialogVisible = true;
-      this.APCode = row.APCode;
-      this.APName = row.APName;
-      this.APNameShort = row.APNameShort;
-      this.APEnName = row.APEnName;
+      this.insertId = row.ID;
+      this.CityCode = row.CityCode;
+      this.CityEnName = row.CityEnName;
+      this.CityEnNameShort = row.CityEnNameShort;
+      this.CityName = row.CityName;
       this.Remark = row.Remark;
-      this.APEnNameShort = row.APEnNameShort;
-      this.IsValid = row.IsValid;
-      this.HvFlight = row.HvFlight;
+      this.CityNameShort = row.CityNameShort;
     },
     // 提交新增与修改
     confirm() {
       var that = this;
-      if (!(this.disabled == false)) {
+      if (!(this.insertId == false)) {
         //修改----------------------------------------------
         var obj = {
-          APCode: that.APCode,
-          APName: that.APName,
-          APNameShort: that.APNameShort,
-          APEnName: that.APEnName,
-          APEnNameShort: that.APEnNameShort,
+          CityCode: that.CityEnName,
+          CityEnName: that.CityEnName,
+          CityEnNameShort: that.CityEnNameShort,
+          CityName: that.CityName,
+          CityNameShort: that.CityNameShort,
           Remark: that.Remark,
-          IsValid: that.IsValid == "是" ? 1 : 0,
-          HvFlight: that.HvFlight == "是" ? 1 : 0
+          ID: that.insertId
         };
+        var arr = [];
+        arr.push(obj);
         axios
-          .get("/api/airports/UpdateAirportsInfo", {
+          .get("/api/aircompany/UpdateAirCompanyInfo", {
             params: {
-              updateAPInfo: obj
+              updateAirInfo: obj
             }
           })
           .then(function(response) {
@@ -181,19 +159,19 @@ export default {
       } else {
         // 新增-----------------------------------------------
         var obj = {
-          APCode: that.APCode,
-          APName: that.APName,
-          APNameShort: that.APNameShort,
-          APEnName: that.APEnName,
+          CityCode: that.CityCode,
+          CityEnName: that.CityEnName,
+          CityEnNameShort: that.CityEnNameShort,
+          CityName: that.CityName,
           Remark: that.Remark,
-          APEnNameShort: that.APEnNameShort,
-          sValid: that.IsValid == "是" ? 1 : 0,
-          HvFlight: that.HvFlight == "是" ? 1 : 0
+          CityNameShort: that.CityNameShort
         };
+        var arr = [];
+        arr.push(obj);
         axios
-          .get("/api/airports/AddAirportsInfo", {
+          .get("/api/aircompany/AddAirCompanyInfo", {
             params: {
-              addAPInfo: obj
+              addAirInfo: obj
             }
           })
           .then(function(response) {
@@ -209,23 +187,16 @@ export default {
           });
       }
     },
-    messagetips(message, type) {
-      this.$message({
-        duration: 1000,
-        message: message,
-        type: type
-      });
-    },
     // 删除数据
     del() {
       var that = this;
       var delData = this.multipleSelection.map(item => {
-        return item.APCode;
+        return item.ID;
       });
       console.log(delData);
       if (!(delData == false)) {
         axios
-          .get("/api/airports/DeleteAirports", {
+          .get("/api/aircompany/DeleteAirCompany", {
             params: {
               info: delData + ""
             }
@@ -287,15 +258,15 @@ export default {
     },
     // 获取数据
     getData() {
-      this.loading = true;
       var that = this;
+      this.loading = true;
       axios
-        .get("/api/Airports/GetAirportsList", {
+        .get("/api/AirCity/GetAirCityList", {
           params: {
             page: that.page,
             pagesize: that.pagesize,
-            apname: that.name,
-            apcode: that.code
+            cityname: that.name,
+            citycode: that.code
           }
         })
         .then(function(response) {
@@ -305,10 +276,6 @@ export default {
             var time = new Date(parseInt(item.LastUpdateTimeStamp));
             var timeTrans = that.dateToString(time);
             item.LastUpdateTimeStamp = timeTrans;
-            var IsValid = item.IsValid ? "是" : "否";
-            item.IsValid = IsValid;
-            var HvFlight = item.HvFlight ? "是" : "否";
-            item.HvFlight = HvFlight;
             return item;
           });
           that.tableData3 = data;
@@ -324,7 +291,6 @@ export default {
       this.getData();
     }
   },
-
   created() {
     this.getData();
   }
@@ -332,14 +298,14 @@ export default {
 </script>
 
 <style lang="scss">
-.zl-airportManage {
-  display: flex;
-  flex-direction: column;
-
+.zl-airManage {
   .el-dialog__body .el-input--suffix .el-input__inner {
     margin-top: 10px;
     margin-bottom: 10px;
   }
+
+  display: flex;
+  flex-direction: column;
 
   .el-button {
     width: 60px;
@@ -354,7 +320,6 @@ export default {
       display: inline-block;
       width: auto;
     }
-
     select {
       width: 110px;
       height: 22px;

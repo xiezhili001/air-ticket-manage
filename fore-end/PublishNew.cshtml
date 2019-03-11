@@ -1,0 +1,1453 @@
+﻿<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset="utf-8">
+		<title>发布活动</title>
+		<meta name="viewport" content="width=device-width, initial-scale=1,maximum-scale=1,user-scalable=no">
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black">
+		<link rel="stylesheet" href="../css/mui.min.css">
+		<link rel="stylesheet" href="../css/uploadimg.css" />
+		<link rel="stylesheet" type="text/css" href="../css/mui.picker.min.css" />
+		<link rel="stylesheet" type="text/css" href="../css/publishact.css" />
+		<link rel="stylesheet" type="text/css" href="../css/mui.dtpicker.css" />
+		<link rel="stylesheet" type="text/css" href="../css/mui.listpicker.css" />
+		<link rel="stylesheet" type="text/css" href="../css/mui.poppicker.css" />
+		<style type="text/css">
+			i {
+				font-style: normal;
+			}
+
+			html,
+			body {
+				width: 100%;
+				height: 100%;
+				position: relative;
+				overflow: hidden;
+			}
+
+			body {
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+
+			.mui-bar {
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+
+			#act-publish-main {
+				width: 100%;
+				height: 100%;
+				position: absolute;
+				top: 0;
+				left: 0;
+				padding-top: 45px;
+				overflow: hidden;
+				overflow-y: auto;
+			}
+
+			.top-right-nav {
+				position: absolute;
+			}
+
+			.act-fixed {
+				position: absolute;
+			}
+		</style>
+	</head>
+
+	<body style="padding-top: 45px;">
+		<header class="mui-bar mui-bar-nav navbg" style="background: #5ab048;z-index: 990;">
+			<div class="commonheader">
+				<button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left mui-action-back">
+					<span class="mui-icon mui-icon-left-nav"></span>返回
+
+				</button>
+				<div class="search search_title">
+					<h1 class="mui-title" id="title">发布活动</h1>
+				</div>
+			</div>
+		</header>
+		<div class="top-right-nav" style="z-index: 991;">
+			<a id="act-top-preview">预览</a>
+			<a class="act-top-publish" id="publish">发布</a>
+		</div>
+		<div id="act-publish-main">
+			<div class="act-publish-img">
+				<div id="uploadImgActImage">
+					<img class="" id="imgActImage" src='' />
+				</div>
+			</div>
+			<div class="act-title act-input act-list">
+				<span>活动标题:</span>
+				<input type="text" name="" id="acttitle" value="" placeholder="请输入活动标题" />
+			</div>
+			<ul class="act-list">
+				<li class="act-input">
+					<span>联系电话:</span>
+					<input type="text" name="" id="phone" value="" placeholder="请输入联系电话" />
+				</li>
+				<li class="act-input">
+					<span>联系人姓名:</span>
+					<input type="text" name="" id="name" value="" placeholder="请输入联系人" />
+				</li>
+				<li class="act-input">
+					<span>活动天数:</span>
+					<input type="text" name="" id="actdays" value="" placeholder="请输入活动天数" />
+				</li>
+				<li class="act-input act-dir-down">
+					<span>活动等级:</span>
+					<input type="text" name="" class="post_date_input kbtn ActLevelSelect" id="ActDifficultLevel" data-key="1"
+					 readonly="readonly" placeholder="请选择活动等级" />
+				</li>
+				<li class="act-input">
+					<span>费用说明:</span>
+					<input type="text" name="" id="costRemark" value="" placeholder="请输入费用说明" />
+				</li>
+				<li class="act-input">
+					<span>更多说明:</span>
+					<input type="text" name="" id="moreRemark" value="" placeholder="请输入更多说明" />
+				</li>
+			</ul>
+			<!--集合地点-->
+			<ul id="gatplaces">
+			</ul>
+			<ul class="act-list">
+				<li class="act-input act-dir-down ActTypeFather">
+					<span>活动性质:</span>
+					<input type="text" name="" id="actType" maxlength="70" value="" data-key="2" readonly="readonly" placeholder="请选择活动性质"
+					 value="免费活动" />
+				</li>
+				<li class="act-input payStyle act-dir-down">
+					<span>支付方式:</span>
+					<input type="text" name="" class="post_date_input kbtn" id="payStyle" data-key="0" placeholder="请选择支付方式" readonly="" />
+				</li>
+			</ul>
+			<div class="act-set act-list act-dir-left" id="act-set-coupon">
+				<span>优惠设置</span>
+			</div>
+			<div class="act-set act-list act-dir-left" id="act-set-gather">
+				<span>集合地点设置</span><i style="color: #f80;font-size: 12px;">(必填)</i>
+			</div>
+			<div class="act-set act-list act-dir-left" id="act-set-order">
+				<span>活动期数设置</span><i style="color: #f80;font-size: 12px;">(必填)</i>
+			</div>
+			<div class="act-set act-list act-dir-left" id="act-set-more">
+				<span>更多设置</span>
+			</div>
+			<div class="act-list act-dir-left" style="padding-left: 10px;">
+				<span>活动详情</span>
+			</div>
+			<div class="act-detail" style="margin: 10px;">
+				<textarea id="tbContent" name="tbContent" placeholder="请输入活动详情"></textarea>
+			</div>
+		</div>
+		<div class="act-coupon-info act-fixed">
+			<header class="mui-bar mui-bar-nav navbg" style="background: #5ab048;">
+				<button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left act-fixed-back">
+					<span class="mui-icon mui-icon-left-nav"></span>返回
+				</button>
+				<div class="flex-center">
+					<h1 class="mui-title">优惠设置</h1>
+				</div>
+			</header>
+			<div class="act_set_coupon" style="">
+				<p>
+					前<input class="input_base" type="text" id="txtWxShareCount" value="0" style="" onkeyup='this.value=this.value.replace(/\D/gi,"")' />个分享朋友圈的报名者，可优惠
+					<input class="input_base" type="text" value="0" style="" id="txtWxShareMoney" onkeyup='this.value=this.value.replace(/[^\.^\d]/gi,"")' />元（不含外挂）
+				</p>
+				<p>
+					报名前<input class="input_base" type="text" id="txtPreCount" value="0" onkeyup='this.value=this.value.replace(/\D/gi,"")' />名每人优惠
+					<input class="input_base" type="text" value="0" id="txtPreMoney" onkeyup='this.value=this.value.replace(/[^\.^\d]/gi,"")' />元（不含外挂）
+				</p>
+			</div>
+			<div class="fixed-add">
+				<a class="sure" style="width: 90%;">完成设置</a>
+			</div>
+		</div>
+		<div class="act-set-more act-fixed">
+			<header class="mui-bar mui-bar-nav navbg" style="background: #5ab048;">
+				<button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left act-fixed-back">
+					<span class="mui-icon mui-icon-left-nav"></span>返回
+				</button>
+				<div class="flex-center">
+					<h1 class="mui-title">更多设置</h1>
+				</div>
+				<a id="act-set-accomplish">完成</a>
+			</header>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<span>用户报名短信通知</span>
+					<div class="mui-switch" id="sendSmsMsg">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</li>
+				<li class="mui-table-view-cell">
+					<span>自动确认报名</span>
+					<div class="mui-switch" id="aotoSure">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</li>
+				<li class="mui-table-view-cell">
+					<span>确认人数超过限制时禁止报名</span>
+					<div class="mui-switch" id="outlimit">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</li>
+			</ul>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<span>是否购买保险</span>
+					<div class="mui-switch" id="needBuyIns">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</li>
+				<li class="mui-table-view-cell">
+					<div class="mui-input-row act-dir-down">
+						<label>购买方式：</label>
+						<input type="text" readonly="readonly" id="buyInsStyle" placeholder="允许领队购买">
+					</div>
+				</li>
+			</ul>
+			<ul class="mui-table-view">
+				<li class="mui-table-view-cell">
+					<span>显示报名清单</span>
+					<div class="mui-switch" id="isShowBMList">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</li>
+				<li class="mui-table-view-cell">
+					<span>允许外挂</span>
+					<div class="mui-switch mui-active" id="isAllowOuter">
+						<div class="mui-switch-handle"></div>
+					</div>
+				</li>
+				<li class="mui-table-view-cell">
+					<div class="mui-input-row act-dir-down">
+						<label>发布到俱乐部：</label>
+						<input type="text" id="teamSel" placeholder="请选择俱乐部">
+					</div>
+				</li>
+				<li class="mui-table-view-cell ">
+					<div class="mui-input-row">
+						<label>集合标识：</label>
+						<input type="text" id="txtGatSign" placeholder="请输入集合标识">
+					</div>
+				</li>
+			</ul>
+		</div>
+		<div class="act-gather-info act-fixed">
+			<header class="mui-bar mui-bar-nav navbg" style="background: #5ab048;">
+				<button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left act-fixed-back">
+					<span class="mui-icon mui-icon-left-nav"></span>返回
+				</button>
+				<div class="flex-center">
+					<h1 class="mui-title">集合地点设置</h1>
+				</div>
+			</header>
+			<ul class="act-gather-ul">
+
+			</ul>
+			<div class="fixed-add">
+				<a class="add">+添加集合地点</a>
+				<a class="sure">完成添加</a>
+			</div>
+		</div>
+		<div class="act-order-info act-fixed" style="">
+			<header class="mui-bar mui-bar-nav navbg" style="background: #5ab048;">
+				<button class="mui-btn mui-btn-link mui-btn-nav mui-pull-left act-fixed-back">
+					<span class="mui-icon mui-icon-left-nav"></span>返回
+				</button>
+				<div class="flex-center">
+					<h1 class="mui-title">活动期数设置</h1>
+				</div>
+			</header>
+			<ul class="act-order-ul">
+
+			</ul>
+			<div class="fixed-add">
+				<a class="add">+添加活动期数</a>
+				<a class="sure">完成添加</a>
+			</div>
+		</div>
+		<input type="hidden" id="hidedest" value="" />
+		<input type="hidden" id="hidetheme" value="" />
+		<input type="hidden" id="hideprovinceid" value="" />
+		<input type="hidden" id="hidecityid" value="" />
+		<input type="hidden" id="hidetraffic" value="0" />
+		<input type="hidden" id="hidesendmsg" value="1" />
+		<input type="hidden" id="hidepaystyle" value="0" />
+		<input type="hidden" id="hideActType" value="2" />
+		<input type="hidden" id="hideActApplytype" value="1" />
+		<input type="hidden" id="hideNeedBuyIns" value="0" />
+		<input type="hidden" id="hideBuyInsStyle" value="0" />
+		<input type="hidden" id="hideActDifficultLevel" value="1" />
+
+		<input type="hidden" id="hideAotoSure" value="0" />
+		<input type="hidden" id="hideOutLimit" value="0" />
+
+		<input type="hidden" id="hideLimitAge" value="0" />
+
+		<input type="hidden" id="hideTeamId" value="0" />
+		<input type="hidden" id="hideAllowOuter" value="1" />
+		<input type="hidden" id="hideShowBMList" value="0" />
+
+	</body>
+	<script src="../js/mui.min.js "></script>
+	<script src="../js/citydata.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/comm.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/moment.min.js.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/jquery-2.0.3.min.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../js/mui.picker.all.js" type="text/javascript" charset="utf-8"></script>
+	<script src="../tinymce/jquery.tinymce.min.js" type="text/javascript"></script>
+	<script type="text/javascript" src="../tinymce/tinymce.min.js"></script>
+	<script type="text/javascript" src="../js/uploadImgv2.js"></script>
+	<script type="text/javascript">
+		Date.prototype.Format = function(fmt) { //author: meizz
+			var o = {
+				"M+": this.getMonth() + 1, //月份
+				"d+": this.getDate(), //日
+				"h+": this.getHours(), //小时
+				"m+": this.getMinutes(), //分
+				"s+": this.getSeconds(), //秒
+				"q+": Math.floor((this.getMonth() + 3) / 3), //季度
+				"S": this.getMilliseconds() //毫秒
+			};
+			if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+			for (var k in o)
+				if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" +
+					o[k]).substr(("" + o[k]).length)));
+			return fmt;
+		};
+
+		var currentpage = 'firststep';
+		var jsonDefaultAct = '';
+		mui.init();
+		//新版增加多项费用套餐跟多个集合点
+
+		var currCityName = "广州";
+		var currCityCode = "00864401";
+		var currProvinceCode = "008644";
+
+		$(document).on("tap", "#act-set-coupon", function() {
+			$(".act-coupon-info").css("left", "0");
+		});
+		$(document).on("tap", "#act-set-gather", function() {
+			$(".act-gather-info").css("left", "0");
+		});
+		$(document).on("tap", "#act-set-order", function() {
+			//
+			//			mui.toast($("#actType").data().key);
+			$(".act-order-info").css("left", "0");
+			if ($("#actType").data().key == 2) {
+				//				mui.toast("免费活动")
+				$(".actMoney").val(0);
+			} else {
+				$(".actMoney").val("");
+				//				mui.toast("付费活动")
+			}
+		});
+
+		//优惠设置
+		$(document).on("tap", ".act-coupon-info .sure", function() {
+			var _couponReg = $.trim($('#txtPreCount').val()) || 0;
+			var _couponRegM = $.trim($('#txtPreMoney').val()) || 0;
+			var _couponShare = $.trim($('#txtWxShareCount').val()) || 0;
+			var _couponShareM = $.trim($('#txtWxShareMoney').val()) || 0;
+			if ((+_couponReg > 0 && _couponRegM <= 0) || (+_couponReg <= 0 && _couponRegM > 0)) {
+				mui.toast("请设置完整的优惠信息！");
+				return;
+			}
+			if ((+_couponShare > 0 && _couponShareM <= 0) || (+_couponShare <= 0 && _couponShareM > 0)) {
+				mui.toast("请设置完整的优惠信息！");
+				return;
+			}
+			if ((+_couponReg > 0 && +_couponRegM > 0) || (+_couponShare > 0 && +_couponShareM > 0)) {
+				$("#act-set-coupon span").html("你已经设置了优惠");
+			} else {
+				$("#act-set-coupon span").html("优惠设置");
+			}
+			$(".act-coupon-info").css("left", "100%");
+		});
+
+		//集合地点设置
+		$(document).on("tap", ".showCityPicker", function() {
+			var cityPicker = new mui.PopPicker({
+				layer: 2,
+				defvalue: $("#hideprovinceid").val() + ',' + $("#hidecityid").val()
+			});
+			cityPicker.setData(citydata);
+			var $that = $(this);
+			tool.clearfocus();
+			cityPicker.show(function(items) {
+				$("#hideprovinceid").val(items[0].value);
+				$("#hidecityid").val(items[1].value);
+				$that.val(items[0].text + " " + items[1].text);
+				$that.attr("data-provinceid", items[0].value);
+				$that.attr("data-cityid", items[1].value);
+				cityPicker.dispose();
+			});
+		});
+		var gatherOption = {};
+		gatherOption.type = "time";
+		gatherOption.value = "00:00";
+		gatherOption.mindate = "00:00";
+		gatherOption.maxdate = "23:59";
+		var gatherPicker = new mui.DtPicker(gatherOption);
+		mui(document).on("tap", ".showTimePiker", function() {
+			var $that = this;
+			gatherPicker.show(function(rs) {
+				$that.value = rs.text;
+			});
+		});
+		$(document).on("tap", ".act-gather-info .add", function() {
+			var gatplaceIndex = $('.act-gather-ul li').length + 1,
+				_html = '';
+			_html += '<li class="gather-list">';
+			_html += '<h2><i>集合地点' + gatplaceIndex + '：</i><span class="act_address_del"></span></h2>';
+			_html += '<input type="text" name="" value="' + currCityName + '" data-provinceid="' + currProvinceCode +
+				'" data-cityid="' + currCityCode + '" class="showCityPicker" readonly="" placeholder="请选择地点"/>';
+			_html += '<input type="text" name="" value="" class="showTimePiker" readonly="" placeholder="请选择时间"/>';
+			_html += '<input type="text" name="" value="" class="showAddressDetail" placeholder="请输入详细地址" /></li>';
+			$('.act-gather-ul').append(_html);
+		});
+		$(document).on("tap", ".act-gather-info .sure", function() {
+			var gather = $(".act-gather-ul li");
+			var gather_bol = true;
+			$(gather).each(function(k, v) {
+				var li_k = k + 1;
+				$(this).find("input").each(function() {
+					var val = $(this).val();
+					if (val == null || val == "" || val == undefined) {
+						mui.toast('集合地点' + li_k + '不能为空');
+						gather_bol = false;
+						return false;
+					}
+				});
+			});
+			if (gather_bol) {
+				$(".act-gather-info").css("left", "100%");
+				$("#act-set-gather span").html("你已设置了" + gather.length + "个集合地点");
+			}
+		});
+		$(document).on("tap", ".act-gather-info .act_address_del", function() {
+			$(this).parents('li').remove();
+			$('.gather-list').each(function(k, v) {
+				gatplaceIndex = k + 1;
+				$(this).find('i').text("集中地点" + gatplaceIndex + ":");
+			});
+		});
+		//活动期数设置
+		$(document).on("tap", ".act-order-info .add", function() {
+			var _order = $(".act-order-ul li").eq($(".act-order-ul li").length - 1);
+			var _len = $(".act-order-ul li").length;
+			var _sTime = new Date(_order.find('.startTime').val().replace(/-/g, "/"));
+			var _eTime = new Date(_order.find('.endTime').val().replace(/-/g, "/"));
+			var _cost = $.trim(_order.find(".actMoney").val());
+			var _max = $.trim(_order.find(".maxPerson").val());
+			var _min = $.trim(_order.find(".minPerson").val());
+			_sTime.setDate(_sTime.getDate() + 7);
+			_eTime.setDate(_eTime.getDate() + 7);
+			_sTime = new Date(_sTime).Format("yyyy-MM-dd hh:mm");
+			_eTime = new Date(_eTime).Format("yyyy-MM-dd hh:mm");
+			if (_sTime == "" || _eTime == "" || _cost == "" || _max == "" || _min == "") {
+				mui.toast("请完善第" + _len + "期的内容！");
+				return;
+			}
+			if (!/(^[0-9]{1,10}.[0-9]{2,4}$)|(^[0-9]{1,10}$)/.test(_cost) && k == 2) {
+				mui.toast('请输入第' + _len + '期正确的费用信息!');
+				return;
+			}
+			if (!/^[0-9]{1,10}$/.test(_max)) {
+				mui.toast('请输入第' + _len + '期正确的人数限制!');
+				return;
+			}
+			if (!/^[0-9]{1,10}$/.test(_min)) {
+				mui.toast('请输入第' + _len + '期正确的成行人数!');
+				return;
+			}
+			if ((+_max) < (+_min)) {
+				mui.toast('第' + _len + '期的成行人数不能大于人数限制!');
+				return;
+			}
+			var _html = '';
+			var li_length = ($(".act-order-info li").length + 1);
+			_html += '<li class="order-list"><h2><i>第' + li_length +
+				'期</i><span class="act_address_del"></span></h2>';
+			_html += '<div class=""><span>出发时间：</span><input type="text" name="" class="startTime" readonly="" value="' +
+				_sTime + '" placeholder="出发时间"/></div>';
+			_html += '<div class=""><span>报名截止：</span><input type="text" name="" class="endTime" readonly="" value="' + _eTime +
+				'" placeholder="报名截止时间"/></div>';
+			_html += '<div class="actCosts"><span>费用：</span><input type="text" name="" class="actMoney" value="' + _cost +
+				'" placeholder="费用，只能有数字和小数点"/></div>';
+			_html +=
+				'<div class=""><span>佣金：</span><input type="text" name="" class="slRecruitCommission" id="slRecruitCommission' +
+				li_length + '" value="" readonly="readonly" placeholder="请选择活动佣金"></div>';
+			_html += '<div class=""><span>人数限制：</span><input type="text" name="" class="maxPerson" value="' + _max +
+				'" placeholder="人数限制，只能是数字"/></div>';
+			_html += '<div class=""><span>成行人数：</span><input type="text" name="" class="minPerson" value="' + _min +
+				'" placeholder="成行人数，只能是数字"/></div></li>';
+			$('.act-order-ul').append(_html);
+					BindRecruitCommissionMoneySelect(li_length, 12, 12);
+		});
+		var orderTime = new Date();
+		var ot_year = orderTime.getFullYear();
+		var ot_mouth = orderTime.getMonth() > 9 ? (orderTime.getMonth() + 1) : "0" + (orderTime.getMonth() + 1);
+		var ot_day = orderTime.getDate() > 9 ? orderTime.getDate() : "0" + orderTime.getDate();
+		var ot_hours = orderTime.getHours() > 9 ? orderTime.getHours() : "0" + orderTime.getHours();
+		var ot_minute = orderTime.getMinutes() > 9 ? orderTime.getMinutes() : "0" + orderTime.getMinutes();
+		var orderOption = {};
+		orderOption.type = "datetime";
+		orderOption.value = ot_year + "/" + ot_mouth + "/" + ot_day + " " + ot_hours + ":" + ot_minute;
+		orderOption.mindate = ot_year + "/" + ot_mouth + "/" + ot_day + " " + ot_hours + ":" + ot_minute;
+		orderOption.maxdate = "2099/12/31 23:59";
+		var orderPicker = new mui.DtPicker(orderOption);
+		mui(document).on("tap", ".startTime,.endTime", function() {
+			var $that = this;
+			orderPicker.show(function(rs) {
+				$that.value = rs.text;
+			});
+		});
+		$(document).on("tap", ".act-order-info .sure", function() {
+			var order = $(".act-order-ul li");
+			var order_bol = true;
+			$(order).each(function(k, v) {
+				var li_k = k + 1;
+				var $that = $(this);
+				$(this).find("input").each(function(k, v) {
+					var val = $.trim($(this).val());
+					if (val == null || val == "" || val == undefined) {
+						mui.toast('第' + li_k + '期信息不能为空！');
+						order_bol = false;
+						return false;
+					}
+					if (!/(^[0-9]{1,10}.[0-9]{2,4}$)|(^[0-9]{1,10}$)/.test(val) && k == 2) {
+						mui.toast('请输入第' + li_k + '期正确的费用信息!');
+						order_bol = false;
+						return false;
+					}
+					if (!/^[0-9]{1,10}$/.test(val) && (k == 3 || k == 4)) {
+						mui.toast('请输入第' + li_k + '期正确的人数!');
+						order_bol = false;
+						return false;
+					}
+					if (+val > +$.trim($that.find("input").eq(3).val()) && k == 4) {
+						mui.toast('第' + li_k + '期的成行人数不能大于人数限制!');
+						order_bol = false;
+						return false;
+					}
+				});
+			});
+			if (order_bol) {
+				$(".act-order-info").css("left", "100%");
+				$("#act-set-order span").html("你已设置了" + order.length + "期活动");
+			}
+		});
+		$(document).on("tap", ".act-order-info .act_address_del", function() {
+			$(this).parents('li').remove();
+			$('.order-list').each(function(k, v) {
+				$(this).find('i').text("第" + (k + 1) + "期：");
+			});
+		});
+
+		$("#act-set-more").on("tap", function() {
+			$(".act-set-more").css("left", "0");
+			act.getteamlist(function(result) {
+				if (result.code === 1) {
+					var teamData = result.data;
+					var teamBtn = document.getElementById("teamSel");
+					teamBtn.value = teamData[0].text;
+					$('#hideTeamId').val(teamData[0].value);
+
+					var teamid = parseInt(jsonDefaultAct.teamid);
+					if (teamid > 0) {
+						$.each(teamData, function(k, v) {
+							if (teamid == v.value) {
+								teamBtn.value = v.text;
+								$('#hideTeamId').val(v.value);
+							}
+						});
+					}
+
+					var teamPicker = new mui.PopPicker();
+					teamPicker.setData(teamData);
+					teamBtn.addEventListener('tap', function() {
+						tool.clearfocus();
+						teamPicker.show(function(items) {
+							$("#hideTeamId").val(items[0].value);
+							teamBtn.value = items[0].text;
+						});
+					});
+				}
+			});
+		});
+
+		$(".act-fixed-back").on("tap", function() {
+			$(".act-fixed").css("left", "100%");
+		});
+		$("#act-set-accomplish").on("tap", function() {
+			$(".act-set-more").css("left", "100%");
+		});
+
+		$("#act-top-preview").on("tap", function() {
+			actcache().done(function(result) {
+				//window.location.href = "/mvc_v5/huodong/A/InfoCache";
+				tool.openurl('活动预览', 'http://m.belltrip.cn/mvc_v5/huodong/A/InfoCache', null);
+			});
+		});
+
+		mui('#isAllowOuter').each(function() { //循环所有toggle
+			//toggle.classList.contains('mui-active') 可识别该toggle的开关状态
+			$("#hideAllowOuter").val(this.classList.contains('mui-active') ? '1' : '0');
+			/**
+			 * toggle 事件监听
+			 */
+			this.addEventListener('toggle', function(event) {
+				//event.detail.isActive 可直接获取当前状态
+				$("#hideAllowOuter").val(event.detail.isActive ? '1' : '0');
+			});
+		});
+
+		mui('#sendSmsMsg').each(function() { //循环所有toggle
+			//toggle.classList.contains('mui-active') 可识别该toggle的开关状态
+			$("#hidesendmsg").val(this.classList.contains('mui-active') ? '1' : '0');
+			/**
+			 * toggle 事件监听
+			 */
+			this.addEventListener('toggle', function(event) {
+				//event.detail.isActive 可直接获取当前状态
+				$("#hidesendmsg").val(event.detail.isActive ? '1' : '0');
+			});
+		});
+		mui('#needBuyIns').each(function() { //循环所有toggle
+			//toggle.classList.contains('mui-active') 可识别该toggle的开关状态
+			$("#hideNeedBuyIns").val(this.classList.contains('mui-active') ? '1' : '0');
+			/**
+			 * toggle 事件监听
+			 */
+			this.addEventListener('toggle', function(event) {
+				//event.detail.isActive 可直接获取当前状态
+				$("#hideNeedBuyIns").val(event.detail.isActive ? '1' : '0');
+			});
+		});
+		//自动确认报名
+		mui('#aotoSure').each(function() {
+			$("#hideAotoSure").val(this.classList.contains('mui-active') ? '1' : '0');
+			this.addEventListener('toggle', function(event) {
+				$("#hideAotoSure").val(event.detail.isActive ? '1' : '0');
+			});
+		});
+		//是否显示报名列表
+		mui('#isShowBMList').each(function() {
+			$("#hideShowBMList").val(this.classList.contains('mui-active') ? '1' : '0');
+			this.addEventListener('toggle', function(event) {
+				$("#hideShowBMList").val(event.detail.isActive ? '1' : '0');
+			});
+		});
+		//确认人数超过限制时禁止报名
+		mui('#outlimit').each(function() {
+			$("#hideOutLimit").val(this.classList.contains('mui-active') ? '1' : '0');
+			this.addEventListener('toggle', function(event) {
+				$("#hideOutLimit").val(event.detail.isActive ? '1' : '0');
+			});
+		});
+		//注册目的地选择的回调函数
+		window.addEventListener('_destcallback', function(event) {
+			var data = event.detail.data;
+			var dest = '',
+				destname = '';
+			data = JSON.parse(data);
+			for (i = 0; i < data.length; i++) {
+				dest += data[i].id + "|" + data[i].value + ",";
+				destname += data[i].value + "、";
+			}
+			if (dest.length > 0) {
+				dest = dest.substring(0, dest.length - 1);
+			}
+			if (destname.length > 0) {
+				destname = destname.substring(0, destname.length - 1);
+			}
+			$("#dest").val(destname);
+			$("#hidedest").val(dest);
+			console.log("act-publishact _destcallback");
+		});
+		//注册主题选择的回调函数
+		window.addEventListener('_themecallback', function(event) {
+			var data = event.detail.data;
+			var dest = '',
+				destname = '';
+			data = JSON.parse(data);
+			for (i = 0; i < data.length; i++) {
+				dest += data[i].id + "|" + data[i].value + ",";
+				destname += data[i].value + "、";
+			}
+			if (dest.length > 0) {
+				dest = dest.substring(0, dest.length - 1);
+			}
+			if (destname.length > 0) {
+				destname = destname.substring(0, destname.length - 1);
+			}
+			$("#theme").val(destname);
+			$("#hidetheme").val(dest);
+			console.log("act-publishact _themecallback");
+		});
+		window.addEventListener('back', function() {
+			//保存活动详情内容
+			var actcontent = tinyMCE.get('tbContent').getContent();
+			actcontent = encodeURIComponent(actcontent);
+			if (tool.TrimAll(actcontent).length > 0) {
+				tool.save('$publish_act_info', actcontent);
+			}
+		});
+		mui.plusReady(function() {
+			$("#uploadImgActImage").on("click", function() {
+				TripImgUpload.upload(false, function(result) {
+					if (result && result.length) {
+						$('#imgActImage').attr("src", result[0].FinallyImage.replace(/show/, "cover"));
+					}
+				});
+			});
+			tinymce.init({
+				selector: 'textarea',
+				height: 500,
+				plugins: [
+					'advlist autolink lists link image charmap print preview anchor',
+					'searchreplace visualblocks code fullscreen',
+					'insertdatetime media table paste code',
+					'textcolor colorpicker'
+				],
+				toolbar: 'insertfile undo redo | bold italic fontsizeselect forecolor backcolor | alignleft aligncenter alignright | outdent indent | image video | fullscreen',
+				content_css: [],
+				language: 'zh_CN',
+				fontsize_formats: "14px 16px 18px 24px 36px",
+				content_css: "../tinymce/editor_content.css",
+				menubar: false
+			});
+			act.getpublishinitNew(function(result) {
+				//console.log(JSON.stringify(result));
+				mui.web_query('servers/ActNewHandler.ashx', {
+					action: 'GetActInitData'
+				}, function(result) {
+					//console.log(JSON.stringify(result));
+					if (result.code == 0) {
+						var data = result.data;
+						$("#phone").val(data.ActData.LDPhone);
+						$("#name").val(data.ActData.LDName);
+						$("#acttitle").val(data.ActData.Title);
+						$("#actdays").val(data.ActData.ActDays);
+						$("#costRemark").val(data.ActData.CostRemark);
+						$("#moreRemark").val(data.ActData.MoreRemark);
+						$("#imgActImage").val(data.ActData.ActImage);
+						initActType(data.ActData.ActType);
+						initDeffical(data.ActData.DifficultLevel);
+						initInsStyle(data.ActData.SureHelp);
+						initPayType(data.ActData.PayType);
+						initGatplace(data.ActGatplaces);
+						initSchedules(data.ActSchedules);
+
+					} else {
+						initDefaultAct();
+					}
+				}, function(e) {
+					initDefaultAct();
+					mui.toast(e);
+				}, 1, true);
+
+				var cityinfo = home.getcityinfo();
+				if (cityinfo != "" && cityinfo != null) {
+					cityinfo = eval("(" + cityinfo + ")");
+					currCityCode = cityinfo.code;
+					currCityName = cityinfo.name;
+					currProvinceCode = currCityCode.substring(0, 6);
+					$("#hideprovinceid").val(currProvinceCode);
+					$("#hidecityid").val(currCityCode);
+				}
+			});
+		});
+		//发布
+		$("#publish").off("tap").on("tap", function() {
+			//找到活动详情中的图片标签
+			//console.log(home.getcitycode())
+			var actcontent = tinyMCE.get('tbContent').getContent();
+			actcontent = encodeURIComponent(actcontent);
+			var themeImg = $("#imgActImage").attr('src');
+			if (!themeImg) {
+				mui.toast('请上传主题图片');
+				return;
+			}
+
+			var acttitle = $("#acttitle").val();
+			if (tool.TrimAll(acttitle).length == 0) {
+				mui.toast('请输入活动标题');
+				return;
+			}
+
+			var name = $("#name").val();
+			if (tool.TrimAll(name).length == 0) {
+				mui.toast('请输入联系人姓名');
+				return;
+			}
+			var phone = $("#phone").val();
+			if (tool.TrimAll(phone).length == 0) {
+				mui.toast('请输入联系人手机');
+				return;
+			}
+			if (!tool.checkphone(phone)) {
+				alert('联系人手机格式不正确');
+				return;
+			}
+			var actdays = $("#actdays").val();
+			if (tool.TrimAll(actdays).length == 0) {
+				mui.toast('请输入活动天数');
+				return;
+			}
+			if (!tool.checknum(actdays)) {
+				mui.toast('请输入正确的活动天数');
+				return;
+			}
+
+			if (tool.TrimAll(themeImg).length == 0) {
+				mui.toast('请上传活动主题图片');
+				return;
+			}
+			if (tool.TrimAll(actcontent).length == 0) {
+				mui.toast('请输入活动详情');
+				return;
+			}
+			var smsnotice = $("#hidesendmsg").val();
+
+			//其他报名-伪数据
+			var _vDummyBoy = $("#txtOtherMaleNum").val() || "";
+			var _vDummyGirl = $("#txtOtherFemaleNum").val() || "";
+
+			var TeamId = $('#TeamId').val();
+			var gatSign = $('#txtGatSign').val() || "";
+			var isAllowOuter = $('#hideAllowOuter').val();
+			var isShowBMList = $('#hideShowBMList').val();
+
+			var acttype = $("#actType").data().key;
+			var paytype = $("#payStyle").data().key;
+
+			var _PreCount = $('#txtPreCount').val() || 0;
+			var _PreMoney = $('#txtPreMoney').val() || 0;
+			var _WxShareCount = $('#txtWxShareCount').val() || 0;
+			var _WxShareMoney = $('#txtWxShareMoney').val() || 0;
+
+			//集合点v5,费用套餐v5
+			var gatplaces = [];
+			var costs = [];
+			var schedules = [];
+			var placeOK = true;
+
+			$('.gather-list').each(function(k, v) {
+
+				var $that = $(this);
+				var provinceid = $that.find(".showCityPicker").data().provinceid;
+				var cityid = $that.find(".showCityPicker").data().cityid;
+				var cityname = $that.find(".showCityPicker").val();
+				var time = $that.find(".showTimePiker").val();
+				var gatplace = $that.find(".showAddressDetail").val();
+				var time = $that.find(".showTimePiker").val();
+				if (cityname == "" || time == "" || gatplace == "") {
+					mui.toast("请完善活动集合点信息");
+					placeOK = false;
+					return;
+				}
+
+				gatplaces.push({
+					GatPlaceNum: k + 1,
+					Address: gatplace,
+					StartProvinceID: provinceid,
+					StartCityID: cityid,
+					StartCity: cityname,
+					TimeStr: time
+				});
+			});
+
+			if (!placeOK) {
+				mui.toast("请完善活动集合点信息");
+				return;
+			}
+
+			var scheduleOK = true;
+			var personBol = true;
+			$('.order-list').each(function(k, v) {
+				var $that = $(this);
+				_itemStart = $that.find(".startTime").val();
+				_itemRegStop = $that.find(".endTime").val();
+				_itemNum = $.trim($that.find(".maxPerson").val());
+				_cost = $.trim($that.find(".actMoney").val());
+				_lineNum = $.trim($that.find(".minPerson").val());
+				if (_itemStart == "" || _itemRegStop == "" || _itemNum == "" || _cost == "" || _lineNum == "") {
+					mui.toast("请完善活动分期信息");
+					scheduleOK = false;
+					return;
+				}
+				if ((+_itemNum) < (+_lineNum)) {
+					personBol = false;
+					mui.toast("成行人数不能大于人数限制!");
+					return;
+				}
+				if (!/(^[0-9]{1,10}.[0-9]{2,4}$)|(^[0-9]{1,10}$)/.test(_cost)) {
+					personBol = false;
+					mui.toast("请输入正确的费用信息!");
+					return;
+				}
+				schedules.push({
+					StartTime: _itemStart,
+					RegEndTime: _itemRegStop,
+					MaxMembers: _itemNum,
+					LineNum: _lineNum,
+					Costs: _cost
+				});
+			});
+
+			if (!scheduleOK) {
+				mui.toast("请完善活动分期信息");
+				return;
+			}
+
+			if (!personBol) {
+				mui.toast("成行人数不能大于人数限制!");
+				return;
+			}
+
+			var _youhui = {
+				PreBenefitCount: _PreCount,
+				PreBenefitMoney: _PreMoney,
+				OnWxShareBenefitCount: _WxShareCount,
+				OnWxShareBenefitMoney: _WxShareMoney
+			};
+			var postData = {
+				action: "NewPublish",
+				vTitle: acttitle,
+				fanquyucitycode: home.getcitycode(),
+				vLdPhone: phone,
+				vLdName: name,
+				vSmsNotice: smsnotice,
+				setmark: gatSign,
+				vContent: actcontent,
+				vActImages: themeImg,
+				vActDays: actdays,
+				cbxAotoSure: $("#hideAotoSure").val(), //自动确认报名
+				vOutLimit: $("#hideOutLimit").val(), //确认人数超过限制时禁止报名
+				vPayType: paytype, //0-线下支付 1-全额在线支付 2-10%订金在线支付 3-20%订金在线支付 4-30%订金在线支付 5-50%订金在线支付
+				vActApplyType: $("#hideActApplytype").val(), //用支付方式： -1 未设置，0-付款自动确认报名，1-付款后领队手动确认，2-确认报名后才付款
+				vMultiRegister: isAllowOuter, //是否允许外挂
+				showbmlist: isShowBMList, //是否显示报名列表
+				vNeedInsure: $("#hideNeedBuyIns").val(), //是否需要购买保险
+				vLdSureHelp: $("#hideBuyInsStyle").val(), //保险购买方式：0允许领队代购 ，1只能领队代购，2队员自己购买
+				vActType: acttype, //活动性质【AA：AA活动,SY：商业活动,ZZ：自助户外,Free:免费活动】
+				vDifficultLevel: $("#hideActDifficultLevel").val(), //活动等级[1,2,3,4,5]
+				limitAge: $("#hideLimitAge").val(),
+				minAge: $("#age_minage").val() || 0,
+				maxAge: $("#age_maxage").val() || 0,
+				youhui: JSON.stringify(_youhui),
+				gatPlaceStr: JSON.stringify(gatplaces),
+				getDateStr: JSON.stringify(schedules)
+			};
+			/*
+			console.log(JSON.stringify(postData));
+			 {"action":"NewPublish","vTitle":"更丰富","fanquyucitycode":"00864401","vLdPhone":"15823694528","vLdName":"5555",
+			 "vSmsNotice":"0","setmark":"","vContent":"%3Cp%3Ev%E5%A4%AB%E4%BA%BA%E6%96%B9%E6%B3%95%3C%2Fp%3E",
+			 "vActImages":"http://test.belltrip.cn//upload/UploadWorks/2017/10/14/cover/SBDiwdhC.jpg",
+			 "vActDays":"1","cbxAotoSure":"0","vOutLimit":"0","vPayType":1,"vActApplyType":"1","vMultiRegister":"1",
+			 "showbmlist":"0","vNeedInsure":"0","vLdSureHelp":"0","vActType":2,"vDifficultLevel":"1","limitAge":"0",
+			 "minAge":0,"maxAge":0,"youhui":"{\"PreBenefitCount\":\"0\",\"PreBenefitMoney\":\"0\",\"OnWxShareBenefitCount\":\"0\",
+			 \"OnWxShareBenefitMoney\":\"0\"}",
+			 "gatPlaceStr":"[{\"GatPlaceNum\":1,\"StartProvinceID\":\"008644\",\"StartCityID\":\"00864401\",\"StartCity\":\"广州\",\"TimeStr\":\"00:00\"}]",
+			 "getDateStr":"[{\"StartTime\":\"2017-10-16 11:37\",\"RegEndTime\":\"2017-10-15 11:37\",\"MaxMembers\":\"52\",\"LineNum\":\"42\",\"Costs\":\"25\"}]"}
+			 *
+			 * */
+			act.publishNew(postData, function(result) {
+				plus.nativeUI.closeWaiting();
+				//console.log(JSON.stringify(result));
+				if (result.code === 0) {
+					mui.alert(result.msg, function() {
+						tinymce.activeEditor.setContent('');
+						tool.save('$publish_act_info', '');
+						act.showDetailNew(result.data);
+					});
+				} else {
+					var msg = result.msg.indexOf("您没有通过该城市的领队认证") > -1 ? "您没有通过该城市的领队认证！" : "";
+					if (msg == "") {
+						mui.toast(result.msg);
+					} else {
+						mui.confirm(msg, "是否去领队认证？", ["否", "是"], function(e) {
+							if (e.index == 1) {
+								frm.show('renzheng', '领队认证', 'leadrenzheng.html', 'slide-in-right', 'init', {}, 4);
+							}
+						});
+					}
+				}
+			});
+		});
+
+		function actcache() {
+			var def = $.Deferred();
+			var actcontent = tinyMCE.get('tbContent').getContent();
+			actcontent = encodeURIComponent(actcontent);
+			var themeImg = $("#imgActImage").attr("src");
+			var startcityname = $('.showCityPicker:first').val();
+			var provincenid = $('.showCityPicker:first').data().provinceid;
+			var cityid = $('.showCityPicker:first').data().cityid;
+			var acttitle = $("#acttitle").val();
+			var startdate = $("#startdate").val();
+			var regstopdate = $("#regstopdate").val();
+			var phone = $("#phone").val();
+			var actdays = $("#actdays").val();
+			var maxregcount = $("#maxregcount").val();
+			var gatplace = "";
+			var smsnotice = $("#hidesendmsg").val();
+
+			//其他报名-伪数据
+			var _vDummyBoy = $("#txtOtherMaleNum").val();
+			var _vDummyGirl = $("#txtOtherFemaleNum").val();
+
+			var TeamId = $('#TeamId').val();
+			var gatSign = $('#txtGatSign').val();
+			var isAllowOuter = $('#hideAllowOuter').val();
+
+			var isShowBMList = $('#hideShowBMList').val();
+
+			//活动的json数据
+			var actinfo = {
+				startcity: startcityname || "",
+				startcitycode: $("#hidecityid").val(),
+				startprovincecode: $("#hideprovinceid").val(),
+				title: acttitle || "",
+				startdate: startdate || "",
+				regstopdate: regstopdate || "",
+				traffic: $("#hidetraffic").val(),
+				phone: phone || "",
+				actdays: actdays || 0,
+				maxregcount: maxregcount || 0,
+				gatplace: gatplace,
+				sendsms: smsnotice || 0,
+				dest: '',
+				theme: '',
+				setmark: gatSign || "",
+				content: actcontent || "",
+				themeimg: themeImg || "",
+				aotosure: $("#hideAotoSure").val(), //自动确认报名
+				outlimit: $("#hideOutLimit").val(), //确认人数超过限制时禁止报名
+				paytype: $("#hidepaystyle").val(), //0-线下支付 1-全额在线支付 2-10%订金在线支付 3-20%订金在线支付 4-30%订金在线支付 5-50%订金在线支付
+				applytype: $("#hideActApplytype").val(), //用支付方式： -1 未设置，0-付款自动确认报名，1-付款后领队手动确认，2-确认报名后才付款
+				mutiregister: isAllowOuter || 1, //是否允许外挂
+				showbmlist: isShowBMList || 0, //是否显示报名列表
+				needinsure: $("#hideNeedBuyIns").val(), //是否需要购买保险
+				surehelp: $("#hideBuyInsStyle").val(), //保险购买方式：0允许领队代购 ，1只能领队代购，2队员自己购买
+				acttype: $("#hideActType").val(), //活动性质【AA：AA活动,SY：商业活动,ZZ：自助户外,Free:免费活动】
+				difficultlevel: $("#hideActDifficultLevel").val() //活动等级[1,2,3,4,5]
+					,
+				limitage: $("#hideLimitAge").val(),
+				minage: $("#age_minage").val(),
+				maxage: $("#age_maxage").val(),
+				dummyboy: _vDummyBoy || 0,
+				dummygirl: _vDummyGirl || 0
+			};
+			actinfo = JSON.stringify(actinfo);
+			actinfo = encodeURIComponent(actinfo);
+
+			//集合点v5,费用套餐v5
+			var gatplaces = [];
+			var costs = [];
+			$('.act_address').each(function(k, v) {
+				var $that = $(this);
+				var provinceid = $that.find(".showCityPicker").data().provinceid;
+				var cityid = $that.find(".showCityPicker").data().cityid;
+				var cityname = $that.find(".showCityPicker").val();
+				var gatplace = $that.find(".txtAddress").val();
+				gatplaces.push({
+					GatPlaceNum: k + 1,
+					Address: gatplace,
+					StartProvinceID: provinceid,
+					StartCityID: cityid,
+					StartCity: cityname
+				});
+			});
+			$('.act_money').each(function(k, v) {
+				var $that = $(this);
+				var money = $that.find(".txtMoney").val();
+				var title = $that.find(".txtTitle").val();
+				costs.push({
+					CostName: title,
+					Costs: money
+				});
+			});
+
+			act.actcache(actinfo, TeamId, JSON.stringify(gatplaces), JSON.stringify(costs), function(result) {
+				def.resolve(result);
+			});
+
+			return def.promise();
+		}
+
+		function initDefaultAct(data) {
+			data = data ? data.actinfo : '';
+			if (data) {
+				initActType(data.ActData.ActType);
+				initDeffical(data.ActData.DifficultLevel);
+				initInsStyle(data.ActData.SureHelp);
+				initPayType(data.ActData.PayType);
+				initGatplace(data.ActGatplaces);
+				initSchedules(data.ActSchedules);
+
+				$("#phone").val(data.ActData.LDPhone);
+				$("#name").val(data.ActData.LDName);
+				$("#acttitle").val(data.ActData.Title);
+				$("#actdays").val(data.ActData.ActDays);
+				$("#costRemark").val(data.ActData.CostRemark);
+				$("#moreRemark").val(data.ActData.MoreRemark);
+				$("#imgActImage").val(data.ActData.ActImage);
+
+				$('#txtGatSign').val(data.setmark);
+				$('#hidetraffic').val(data.traffic);
+				$('#hideAllowOuter').val(data.mutiregister);
+				$('#hideTeamId').val(data.teamid);
+				$('#hideLimitAge').val(data.limitage);
+				$('#hideOutLimit').val(data.outlimit);
+				$('#hideAotoSure').val(data.aotosure);
+				$('#hideActDifficultLevel').val(data.difficultlevel);
+				$('#hideBuyInsStyle').val(data.surehelp);
+				$('#hideNeedBuyIns').val(data.needinsure);
+				$('#hideActApplytype').val(data.applytype);
+				$('#hideActType').val(data.acttype);
+				$('#hidepaystyle').val(data.paytype);
+				$('#hidesendmsg').val(data.sendsms);
+				$('#hideShowBMList').val(data.showbmlist);
+
+				if (data.sendsms == "1") {
+					$('#sendSmsMsg').addClass('mui-active');
+				}
+				if (data.aotosure == "1") {
+					$('#aotoSure').addClass('mui-active');
+				}
+				if (data.outlimit == "1") {
+					$('#outlimit').addClass('mui-active');
+				}
+				if (data.needinsure == "1") {
+					$('#needBuyIns').addClass('mui-active');
+				}
+				if (data.mutiregister == "1") {
+					$('#isAllowOuter').addClass('mui-active');
+				}
+				if (data.showbmlist == "1") {
+					$('#isShowBMList').addClass('mui-active');
+				}
+			} else {
+				initActType();
+				initGatplace();
+				initDeffical();
+				initPayType();
+				initInsStyle();
+				initSchedules();
+			}
+			setInterval(actcache, 30 * 1000);
+		}
+
+		function initSchedules(gatplaces) {
+
+			var _html = '';
+			if (gatplaces != undefined && gatplaces && gatplaces.length > 0) {
+				$.each(gatplaces, function(k, v) {
+					var _html = '';
+					_html += '<li class="order-list"><h2><i>第' + (v + 1) + '期</i><span ' + (k != 0 ? 'class="act_address_del"' : "") +
+						'></span></h2>';
+					_html += '<div class=""><span>出发时间：</span><input type="text" name="" value="' + k.StartTime +
+						'" class="startTime" readonly="" placeholder="出发时间" /></div>';
+					_html += '<div class=""><span>报名截止：</span><input type="text" name="" value="' + k.RegEndTime +
+						'" class="endTime" readonly="" placeholder="报名截止时间"/></div>';
+					_html += '<div class="actCosts"><span>费用：</span><input type="text" name="" value="' + k.Costs +
+						'" class="actMoney" placeholder="费用，只能有数字和小数点"/></div>';
+					_html +=
+						'<div class=""><span>佣金：</span><input type="text" name="" class="slRecruitCommission" id="slRecruitCommission' +
+						k.ScheduleNum + '" value="" readonly="readonly" placeholder="请选择活动佣金"></div>';
+
+					_html += '<div class=""><span>人数限制：</span><input type="text" name="" value="' + k.MaxMembers +
+						'" class="maxPerson" placeholder="人数限制，只能是数字"/></div>';
+					_html += '<div class=""><span>成行人数：</span><input type="text" name="" value="' + k.LineNum +
+						'" class="minPerson" placeholder="成行人数，只能是数字"/></div></li>';
+
+				});
+			} else {
+				var _html = '';
+				_html += '<li class="order-list"><h2><i>第1期</i></h2>';
+				_html += '<div class=""><span>出发时间：</span><input type="text" name="" class="startTime" readonly="" value="' + (new Date(
+					(new Date).setDate((new Date).getDate() + 2)).Format("yyyy-MM-dd hh:mm")) + '" placeholder="出发时间"/></div>';
+				_html += '<div class=""><span>报名截止：</span><input type="text" name="" class="endTime" readonly="" value="' + (new Date(
+					(new Date).setDate((new Date).getDate() + 1)).Format("yyyy-MM-dd hh:mm")) + '" placeholder="报名截止时间"/></div>';
+				_html +=
+					'<div class="actCosts"><span>费用：</span><input type="text" name="" class="actMoney" value="" placeholder="费用，只能有数字和小数点"/></div>';
+				_html +=
+					'<div class=""><span>佣金：</span><input type="text" name="" class="slRecruitCommission slRecruitCommission1" id="slRecruitCommission1" value="" readonly="readonly" placeholder="请选择活动佣金"></div>';
+
+				_html +=
+					'<div class=""><span>人数限制：</span><input type="text" name="" class="maxPerson" value="" placeholder="人数限制，只能是数字"/></div>';
+				_html +=
+					'<div class=""><span>成行人数：</span><input type="text" name="" class="minPerson" value="" placeholder="成行人数，只能是数字"/></div></li>';
+
+			}
+			$('.act-order-ul').html(_html);
+
+					BindRecruitCommissionMoneySelect(1, 12, 12);
+		}
+
+		function initGatplace(gatplaces) {
+			var _html = '';
+			if (gatplaces != undefined && gatplaces && gatplaces.length > 0) {
+				$.each(gatplaces, function(k, v) {
+					var time = v.GatplaceTime.match(/[0-9]+/g);
+					var gatTime = time[1] + "-" + time[2];
+					_html += '<li class="gather-list">';
+					_html += '<h2><i>集合地点' + (k + 1) + '：</i><span ' + (k != 0 ? 'class="act_address_del"' : "") + '"></span></h2>';
+					_html += '<input type="text" name="" class="showCityPicker" value="' + v.StartCity + '" data-provinceid="' + v.StartProvinceID +
+						'" data-cityid="' + v.StartCityID + '" class="showCityPicker" readonly="" placeholder="请选择地点"/>';
+					_html += '<input type="text" name="" class="showTimePiker" value="' + (v.TimeStr.replace(/\s+/g, "") ? v.TimeStr
+						.replace(/\s+/g, "") : "") + '" class="showTimePiker" readonly="" placeholder="请选择时间"/>';
+					_html += '<input type="text" name="" class="showAddressDetail" value="' + v.Address +
+						'" placeholder="请输入详细地址" /></li>';
+				});
+			} else {
+				_html += '<li class="gather-list">';
+				_html += '<h2><i>集合地点1：</i></h2>';
+				_html += '<input type="text" name="" value="' + currCityName + '" data-provinceid="' + currProvinceCode +
+					'" data-cityid="' + currCityCode + '" class="showCityPicker" readonly="" placeholder="请选择地点"/>';
+				_html += '<input type="text" name="" value="" class="showTimePiker" readonly="" placeholder="请选择时间"/>';
+				_html += '<input type="text" name="" value="" class="showAddressDetail" placeholder="请输入详细地址" /></li>';
+			}
+			$('.act-gather-ul').html(_html);
+		}
+
+		function initPayType(paytype) { //支付方式
+			var payStyleData = [{
+				value: '0',
+				text: '线下支付'
+			}, {
+				value: '1',
+				text: '在线支付(手续费1.2%)'
+			}];
+			var payStyleBtn = document.getElementById("payStyle");
+			payStyleBtn.value = paytype ? payStyleData[+paytype].text : '线下支付';
+			$("#payStyle").data().key = paytype ? paytype : 0;
+			var payStylePicker = new mui.PopPicker();
+			payStylePicker.setData(payStyleData);
+			payStyleBtn.addEventListener('tap', function() {
+				tool.clearfocus();
+				payStylePicker.show(function(items) {
+					payStyleBtn.value = items[0].text;
+					$("#payStyle").data().key = items[0].value;
+					$("#hidepaystyle").val(paystyleval);
+					var paystyleval = items[0].value;
+					if (paystyleval == "0") {
+						$("#actapplytypepanel").hide();
+					} else {
+						$("#actapplytypepanel").show();
+					}
+					//返回 false 可以阻止选择框的关闭
+				});
+			}, false);
+		}
+
+		function initActType(acttype) { //活动性质
+			var actTypeData = [{
+				value: '1',
+				text: '自助户外'
+			}, {
+				value: '2',
+				text: '免费活动'
+			}];
+			var actTypeBtn = document.getElementById("actType");
+			if (acttype == "1") {
+				actTypeBtn.value = "自助户外";
+				$(".payStyle").css("display", "block");
+				$("#actType").data().key = acttype;
+			} else {
+				actTypeBtn.value = "免费活动";
+				$(".payStyle").css("display", "none");
+				$("#actType").data().key = 2;
+			}
+			var actTypePicker = new mui.PopPicker();
+			actTypePicker.setData(actTypeData);
+			actTypeBtn.addEventListener('tap', function() {
+				tool.clearfocus();
+				actTypePicker.show(function(items) {
+					$("#hideActType").val(items[0].value);
+					actTypeBtn.value = items[0].text;
+					$("#actType").data().key = items[0].value;
+					if (items[0].value == '2') {
+						$(".payStyle").css("display", "none");
+						//						mui.toast("更新了活动性质")
+					} else {
+						$(".payStyle").css("display", "block");
+					}
+				});
+			}, false);
+		}
+
+		function initDeffical(level) { // 活动等级
+			var ActDifficultLevelPicker = new mui.PopPicker();
+			var ActDifficultLevelData = [{
+				value: '1',
+				text: '1级-休闲级'
+			}, {
+				value: '2',
+				text: '2级-锻炼级'
+			}, {
+				value: '3',
+				text: '3级-探索级'
+			}, {
+				value: '4',
+				text: '4级-挑战级'
+			}, {
+				value: '5',
+				text: '5级-大神级'
+			}];
+			var ActDifficultLevelBtn = document.getElementById("ActDifficultLevel");
+			$("#ActDifficultLevel").data().key = level ? level : 1;
+			ActDifficultLevelBtn.value = level ? ActDifficultLevelData[+level].text : "1级-休闲级";
+			ActDifficultLevelPicker.setData(ActDifficultLevelData);
+			ActDifficultLevelBtn.addEventListener('tap', function() {
+				tool.clearfocus();
+				ActDifficultLevelPicker.show(function(items) {
+					$("#hideActDifficultLevel").val(items[0].value);
+					ActDifficultLevelBtn.value = items[0].text;
+					$("#ActDifficultLevel").data().key = items[0].value;
+					if (items[0].value != '1') {
+						$("#needBuyIns").addClass("mui-active");
+						$("#hideNeedBuyIns").val(1);
+					}
+					//返回 false 可以阻止选择框的关闭
+				});
+			});
+		}
+
+		function initInsStyle(ins) { // 保险
+			var byInsStyleData = [{
+				value: '0',
+				text: '允许领队代购'
+			}, {
+				value: '1',
+				text: '只能领队代购'
+			}, {
+				value: '2',
+				text: '队员自己购买'
+			}];
+			//购买方式
+			var buyInsStyleBtn = document.getElementById("buyInsStyle");
+			buyInsStyleBtn.value = ins ? byInsStyleData[+ins].text : '允许领队代购';
+			var buyInsStylePicker = new mui.PopPicker();
+			buyInsStylePicker.setData(byInsStyleData);
+			buyInsStyleBtn.addEventListener('tap', function() {
+				tool.clearfocus();
+				buyInsStylePicker.show(function(items) {
+					$("#hideBuyInsStyle").val(items[0].value);
+					buyInsStyleBtn.value = items[0].text;
+					//返回 false 可以阻止选择框的关闭
+				});
+			});
+		}
+
+		function chooseActType(status) {
+			if (status) {
+				$("#regStopDate_li").show();
+				$("#maxregcount_panel").show();
+				$("#moneypanel").show();
+				$("#actapplytypepanel").show();
+				$("#paystylepanel").show();
+				$("#sendSmsMsg").addClass("mui-active");
+				$("#hidesendmsg").val(1);
+				$("#aotoSure").removeClass("mui-active");
+			} else {
+				$("#regStopDate_li").hide();
+				$("#regstopdate").val($("#startdate").val());
+				$("#maxregcount_panel").hide();
+				$("#maxregcount").val(50);
+				$("#hidesendmsg").val(0);
+				$("#moneypanel").hide();
+				$("#actapplytypepanel").hide();
+				$("#paystylepanel").hide();
+				$("#sendSmsMsg").removeClass("mui-active");
+				$("#aotoSure").addClass("mui-active");
+			}
+		}
+		//---重写返回事件，判断是否有设置没有关闭，设置没有关闭，则关闭设置，否则直接返回
+		mui.back = function() {
+			var isBack = true;
+			for (var i = 0; i < $(".act-fixed").length; i++) {
+				if ($(".act-fixed").eq(i).offset().left == 0) {
+					isBack = false;
+					$(".act-fixed").css("left", "100%");
+					break;
+				}
+			}
+			if (isBack) {
+				plus.webview.currentWebview().hide("slide-out-right", 200);
+			}
+		};
+
+		//绑定 佣金选择按钮
+		function BindRecruitCommissionMoneySelect(scheduleNum, cityCommission, chooseComm) {
+			var ActRecruitCommissionMoneyPicker = new mui.PopPicker();
+			var ActRecruitCommissionMoneyData = [];
+			var recruitEntity = {};
+			if (chooseComm == null || chooseComm <= 0 || chooseComm == undefined) {
+				chooseComm = 12;
+			}
+
+			for (var i = 1; i <= 50; i++) {
+				if (i < 2) {
+					for (var j = 0; j < 10; j++) {
+						var temp1 = i * 10 + j;
+						if (cityCommission > temp1) continue;
+						recruitEntity = {
+							text: (temp1 / 10) + "%",
+							value: temp1
+						}
+						ActRecruitCommissionMoneyData.push(recruitEntity);
+					}
+				} else if (i < 10) {
+					for (var k = 0; k < 2; k++) {
+						var temp2 = (i + k / 2) * 10;
+						if (cityCommission > temp2) continue;
+						recruitEntity = {
+							text: (temp2 / 10) + "%",
+							value: temp2
+						}
+						ActRecruitCommissionMoneyData.push(recruitEntity);
+					}
+				} else {
+					var temp3 = i * 10;
+					if (cityCommission > temp3) continue;
+					recruitEntity = {
+						text: (temp3 / 10) + "%",
+						value: temp3
+					}
+					ActRecruitCommissionMoneyData.push(recruitEntity);
+				}
+			}
+			var ActRecruitCommissionMoneyBtn = document.getElementById("slRecruitCommission" + scheduleNum);
+			ActRecruitCommissionMoneyPicker.setData(ActRecruitCommissionMoneyData);
+			ActRecruitCommissionMoneyBtn.value = ((chooseComm) / 10) + "%";
+
+			$.each(ActRecruitCommissionMoneyData, function(k, v) {
+				if (v.value == '1') {
+					ActRecruitCommissionMoneyBtn.value = v.text;
+				}
+			});
+
+			ActRecruitCommissionMoneyBtn.addEventListener('tap', function() {
+				tool.clearfocus();
+				ActRecruitCommissionMoneyPicker.show(function(items) {
+					$("#hideActDifficultLevel").val(items[0].value);
+					ActRecruitCommissionMoneyBtn.value = items[0].text;
+					$("#slRecruitCommission" + scheduleNum).attr("data-values", items[0].value);
+				});
+			});
+		}
+	</script>
+
+</html>

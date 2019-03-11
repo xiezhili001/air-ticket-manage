@@ -5,13 +5,11 @@ Vue.use(Router);
 
 export default new Router({
   // base: process.env.BASE_URL,
-  routes: [
-    {
+  routes: [{
       path: '/home',
       name: 'home',
       component: () => import('./views/Home.vue'),
-      children: [
-        {
+      children: [{
           path: 'sysUser',
           name: 'sysUser',
           component: () => import('./views/main/sysUser.vue'),
@@ -27,50 +25,62 @@ export default new Router({
           component: () => import('./views/main/structure.vue'),
         },
         {
-          path: 'airManage',
-          name: 'airManage',
-          component: () => import('./views/main/airManage.vue'),
+          path: 'airCompanyManage',
+          name: 'airCompanyManage',
+          component: () => import('./views/main/airCompanyManage.vue'),
         },
         {
           path: 'backManage',
           name: 'backManage',
           component: () => import('./views/main/backManage.vue'),
-        },{
+        }, {
           path: 'airportManage',
           name: 'airportManage',
           component: () => import('./views/main/airportManage.vue'),
-        },{
+        }, {
           path: 'airlineManage',
           name: 'airlineManage',
           component: () => import('./views/main/airlineManage.vue'),
-        },{
+        }, {
           path: 'registerAccount',
           name: 'registerAccount',
           component: () => import('./views/main/registerAccount.vue'),
-        },{
+        }, {
           path: 'platformSet',
           name: 'platformSet',
           component: () => import('./views/main/platformSet.vue'),
-        },{
+        }, {
           path: 'platformOnlineSet',
           name: 'platformOnlineSet',
           component: () => import('./views/main/platformOnlineSet.vue'),
-        },{
+        }, {
           path: 'taxationManage',
           name: 'taxationManage',
           component: () => import('./views/main/taxationManage.vue'),
-        },{
+        }, {
           path: 'taxationControl',
           name: 'taxationControl',
           component: () => import('./views/main/taxationControl.vue'),
-        },{
+        }, {
           path: 'integralAccount',
           name: 'integralAccount',
           component: () => import('./views/main/integralAccount.vue'),
-        },{
+        }, {
           path: 'ticketOrder',
           name: 'ticketOrder',
           component: () => import('./views/main/ticketOrder.vue'),
+        },{
+          path: 'cityMangae',
+          name: 'cityMangae',
+          component: () => import('./views/main/cityMangae.vue'),
+        },{
+          path: 'countryManage',
+          name: 'countryManage',
+          component: () => import('./views/main/countryManage.vue'),
+        },{
+          path: 'webSiteManage',
+          name: 'webSiteManage',
+          component: () => import('./views/main/webSiteManage.vue'),
         },
       ]
     },
