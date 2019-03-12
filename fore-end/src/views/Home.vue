@@ -24,7 +24,7 @@
                 <div
                   v-for="item in setList"
                   :key="item.name"
-                  class="text item list-content"
+                  :class="['text', 'item', 'list-content', item.id == isActive ? 'isActive' : '']"
                   @click="goDetail(item.id)"
                 >
                   {{ item.name }}
@@ -38,7 +38,7 @@
                 <div
                   v-for="item in manageList"
                   :key="item.name"
-                  class="text item list-content"
+                  :class="['text', 'item', 'list-content', item.id == isActive ? 'isActive' : '']"
                   @click="goDetail(item.id)"
                 >
                   {{ item.name }}
@@ -68,6 +68,7 @@ export default {
   },
   data() {
     return {
+      isActive: '',
       setList: [
         {
           name: "网站管理",
@@ -163,6 +164,12 @@ export default {
       iconToggle: "el-icon-d-arrow-left"
     };
   },
+  computed: {
+    highLight(id) {
+      console.log(id);
+      return 'sfsf'
+    }
+  },
   methods: {
     // 切换菜单隐藏
     hideMenu() {
@@ -235,9 +242,10 @@ export default {
     },
     // main 页面跳转
     goDetail(id) {
+      this.isActive =id;
       this.$router.push({ name: id });
     }
-  }
+  },
 };
 </script>
 
@@ -245,7 +253,9 @@ export default {
 .zl-home {
   height: 100%;
   font-size: 16px;
-
+  .isActive {
+    color : #66b1ff;
+  }
   .list-content {
     cursor: pointer;
 

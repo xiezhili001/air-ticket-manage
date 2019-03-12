@@ -44,17 +44,44 @@
     </div>
 
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-      <el-select v-model="slectCnname" filterable placeholder="请选择航司">
-        <el-option v-for="item in option1" :key="item.ID" :label="item.CNName" :value="item.ID"></el-option>
+      <el-select v-model="CNName" filterable placeholder="请选择航司">
+        <el-option v-for="item in selectCNName" :key="item.ID" :label="item.CNName" :value="item.ID"></el-option>
       </el-select>
-      <el-input placeholder="请输入出发城市" v-model="SGNAPCityName" clearable></el-input>
-      <el-input placeholder="请输入目标城市" v-model="HANAPCityName" clearable></el-input>
-       <el-select v-model="startAirport" filterable placeholder="请选择出发航班">
-        <el-option v-for="item in option1" :key="item.APCode" :label="item.APName" :value="item.APName"></el-option>
+      <br>
+      <el-select
+        v-model="SGNAPCityName"
+        filterable
+        remote
+        reserve-keyword
+        placeholder="请搜索出发城市"
+        :remote-method="remoteMethod"
+        :loading="loading1"
+      >
+        <el-option
+          v-for="item in selectCity"
+          :key="item.CityCode"
+          :label="item.AllName"
+          :value="item.CityCode"
+        ></el-option>
       </el-select>
-       <el-select v-model="endAirport" filterable placeholder="请选择目标">
-        <el-option v-for="item in option1" :key="item.APCode" :label="item.APName" :value="item.APName"></el-option>
+      <br>
+      <el-select
+        v-model="HANAPCityName"
+        filterable
+        remote
+        reserve-keyword
+        placeholder="请搜索目标城市"
+        :remote-method="remoteMethod"
+        :loading="loading1"
+      >
+        <el-option
+          v-for="item in selectCity"
+          :key="item.CityCode"
+          :label="item.AllName"
+          :value="item.CityCode"
+        ></el-option>
       </el-select>
+
       <el-input placeholder="备注" v-model="Remark" clearable></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -81,11 +108,12 @@ export default {
   name: "airlineManage",
   data() {
     return {
-      endAirport: '',
-      option2: '',
-      startAirport: '',
-      slectCnname: "",
-      option1: "",
+      loading1: false,
+      selectCity: '',
+      HANAPCityName: "",
+      SGNAPCityName: "",
+      CNName: "",
+      selectCNName: "",
       cnname: "",
       options: [
         {
@@ -119,13 +147,34 @@ export default {
       ecity: "",
       SGNAPCityName: "",
       HANAPCityName: "",
-      SGNAPName: "",
-      HANAPName: "",
       Remark: ""
     };
   },
 
   methods: {
+    // 获取城市
+    remoteMethod(query) {
+      this.loading1 = true;
+      var that = this;
+      console.log(query);
+      axios
+        .get("/api/AirLine/GetAirportsData", {
+          params: {
+            str: query
+          }
+        })
+        .then(function(response) {
+          if (response.data.Errcode == 0) {
+            console.log(response.data.Data);
+            that.selectCity = response.data.Data.list;
+             that.loading1 = false;
+          } else {
+             that.messagetips(response.data.Message, "warning");
+          }
+        })
+        .catch(function(error) {
+        });
+    },
     // 航司的下拉信息
     GetAirWebsiteData() {
       var that = this;
@@ -133,24 +182,7 @@ export default {
         .get("/api/AirLine/GetAirWebsiteData?str1=", {})
         .then(function(response) {
           if (response.data.Errcode == 0) {
-            that.option1 = response.data.Data.list;
-          } else {
-            that.messagetips(response.data.Message, "warning");
-          }
-        })
-        .catch(function(error) {
-          that.messagetips("网络异常，请稍后重试", "warning");
-        });
-    },
-    // 机场的下拉信息
-    GetAirportsData() {
-      var that = this;
-      axios
-        .get("http://192.168.2.42:8085/api/AirLine/GetAirportsData?str=", {})
-        .then(function(response) {
-          if (response.data.Errcode == 0) {
-            that.option2 = response.data.Data.list;
-            console.log(that.option2);
+            that.selectCNName = response.data.Data.list;
           } else {
             that.messagetips(response.data.Message, "warning");
           }
@@ -169,7 +201,6 @@ export default {
     },
     // 新增数据-----------------------
     insert() {
-      this.GetAirportsData();
       this.GetAirWebsiteData();
       this.disabled = false;
       this.title = "新增数据";
@@ -178,41 +209,45 @@ export default {
       this.SGNAPCityName = "";
       this.HANAPCityName = "";
       this.Remark = "";
-      this.HANAPName = "";
-      this.SGNAPName = "";
+      this.CNName = '';
     },
     // 修改数据
     fixData(row) {
+      this.GetAirWebsiteData();
       this.disabled = true;
       this.title = "修改数据";
       this.dialogVisible = true;
-      this.AirlineCode = row.AirlineCode;
-      this.SGNAPCityName = row.SGNAPCityName;
-      this.HANAPCityName = row.HANAPCityName;
-      this.HANAPName = row.HANAPName;
+      this.CNName = parseInt(row.AirWebID);
+      this.SGNAPCityName = row.DCity;
+      this.HANAPCityName = row.ACity;
+      this.remoteMethod(this.SGNAPCityName);
+      this.remoteMethod(this.HANAPCityName);
       this.Remark = row.Remark;
-      this.SGNAPName = row.SGNAPName;
       this.ID = row.ID;
     },
     // 提交新增与修改
     confirm() {
+      if(this.SGNAPCityName ==this.HANAPCityName){
+        this.messagetips("出发地点和目标地点不能相同", "warning");
+        this.dialogVisible = true;
+        return;
+      }
       var that = this;
       if (!(this.disabled == false)) {
         //修改----------------------------------------------
         var obj = {
-          SGNAPCityName: that.SGNAPCityName,
-          HANAPCityName: that.HANAPCityName,
-          HANAPName: that.HANAPName,
-          SGNAPName: that.SGNAPName,
+          DCity: that.SGNAPCityName,
+          ACity: that.HANAPCityName,
           Remark: that.Remark,
-          ID: that.ID
+          ID: that.ID,
+          AirWebID: that.CNName
         };
         var arr = [];
         arr.push(obj);
         axios
-          .get("/api/AirLine/UpdateAirlinesInfo", {
+          .get("/api/AirLine/UpdateAirportsInfo", {
             params: {
-              updateAWInfo: obj
+              updateALInfo: obj
             }
           })
           .then(function(response) {
@@ -229,18 +264,17 @@ export default {
       } else {
         // 新增-----------------------------------------------
         var obj = {
-          SGNAPCityName: that.SGNAPCityName,
-          HANAPCityName: that.HANAPCityName,
-          HANAPName: that.HANAPName,
+          DCity: that.SGNAPCityName,
+          ACity: that.HANAPCityName,
           Remark: that.Remark,
-          SGNAPName: that.SGNAPName
+          AirWebID: that.CNName
         };
         var arr = [];
         arr.push(obj);
         axios
           .get("/api/AirLine/AddAirlinesInfo", {
             params: {
-              addAWInfo: obj
+              addALInfo: obj
             }
           })
           .then(function(response) {

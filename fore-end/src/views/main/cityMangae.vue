@@ -1,5 +1,5 @@
 <template>
-  <div style="height: 100%" class="zl-airManage" v-loading="loading">
+  <div style="height: 100%" class="zl-cityManage" v-loading="loading">
     <div class="header">
       中文名称:
       <input type="text" v-model="name">
@@ -35,10 +35,17 @@
 
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
       <el-input placeholder="请输入编码" v-model="CityCode" clearable :disabled="disabled"></el-input>
-      <el-input placeholder="请输入航司名称" v-model="CityEnName" clearable></el-input>
-      <el-input placeholder="请输入中文简称" v-model="CityEnNameShort" clearable></el-input>
-      <el-input placeholder="请输入英文名称" v-model="CityName" clearable></el-input>
-      <el-input placeholder="请输入英文简称" v-model="CityNameShort" clearable></el-input>
+       <el-input placeholder="请输入城市名称" v-model="CityName" clearable></el-input>
+      <el-input placeholder="请输入英文名称" v-model="CityEnName" clearable></el-input>
+      <el-input placeholder="请输入省份ID" v-model="ProvinceID" clearable></el-input>
+      <el-select v-model="CountryID" filterable placeholder="请选择国家">
+    <el-option
+      v-for="item in CountryIDSlect"
+      :key="item.ID"
+      :label="item.CountryName"
+      :value="item.ID">
+    </el-option>
+  </el-select>
       <el-input placeholder="备注" v-model="Remark" clearable></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -65,6 +72,7 @@ export default {
   name: "airCompanyManage",
   data() {
     return {
+      CountryIDSlect: '',
       loading: false,
       disabled: false,
       title: "新增数据",
@@ -80,15 +88,33 @@ export default {
 
       CityCode: "",
       CityEnName: "",
-      CityEnNameShort: "",
+      ProvinceID: "",
       CityName: "",
-      CityNameShort: "",
+      CountryID: "",
       Remark: "",
       insertId: ""
     };
   },
 
   methods: {
+    // 国家下拉数据源
+    GetAirCountryList() {
+      var that = this;
+      axios
+          .get("/api/AirCity/GetAirCountryList?str=", {
+
+          })
+          .then(function(response) {
+            if (response.data.Errcode == 0) {
+              console.log(response.data.Data);
+              that.CountryIDSlect = response.data.Data.list
+            } else {
+              that.messagetips(response.data.Message, "warning");
+            }
+          })
+          .catch(function(error) {
+          });
+    },
     // 消息提示
     messagetips(message, type) {
       this.$message({
@@ -99,29 +125,31 @@ export default {
     },
     // 新增数据-----------------------
     insert() {
+      this.GetAirCountryList();
       this.disabled = false;
       this.title = "新增数据";
       this.dialogVisible = true;
       this.insertId = "";
       this.CityCode = "";
       this.CityEnName = "";
-      this.CityEnNameShort = "";
+      this.ProvinceID = "";
       this.CityName = "";
       this.Remark = "";
-      this.CityNameShort = "";
+      this.CountryID = "";
     },
     // 修改数据
     fixData(row) {
+      this.GetAirCountryList();
       this.disabled = true;
       this.title = "修改数据";
       this.dialogVisible = true;
       this.insertId = row.ID;
       this.CityCode = row.CityCode;
       this.CityEnName = row.CityEnName;
-      this.CityEnNameShort = row.CityEnNameShort;
+      this.ProvinceID = row.ProvinceID;
       this.CityName = row.CityName;
       this.Remark = row.Remark;
-      this.CityNameShort = row.CityNameShort;
+      this.CountryID = row.CountryID;
     },
     // 提交新增与修改
     confirm() {
@@ -129,20 +157,20 @@ export default {
       if (!(this.insertId == false)) {
         //修改----------------------------------------------
         var obj = {
-          CityCode: that.CityEnName,
+          CityCode: that.CityCode,
           CityEnName: that.CityEnName,
-          CityEnNameShort: that.CityEnNameShort,
+          ProvinceID: that.ProvinceID,
           CityName: that.CityName,
-          CityNameShort: that.CityNameShort,
+          CountryID: that.CountryID,
           Remark: that.Remark,
           ID: that.insertId
         };
         var arr = [];
         arr.push(obj);
         axios
-          .get("/api/aircompany/UpdateAirCompanyInfo", {
+          .get("/api/AirCity/UpdateAirCityInfo", {
             params: {
-              updateAirInfo: obj
+              updateCityInfo: obj
             }
           })
           .then(function(response) {
@@ -161,17 +189,17 @@ export default {
         var obj = {
           CityCode: that.CityCode,
           CityEnName: that.CityEnName,
-          CityEnNameShort: that.CityEnNameShort,
+          ProvinceID: that.ProvinceID,
           CityName: that.CityName,
           Remark: that.Remark,
-          CityNameShort: that.CityNameShort
+          CountryID: that.CountryID
         };
         var arr = [];
         arr.push(obj);
         axios
-          .get("/api/aircompany/AddAirCompanyInfo", {
+          .get("/api/AirCity/AddAirCityInfo", {
             params: {
-              addAirInfo: obj
+              addCityInfo: obj
             }
           })
           .then(function(response) {
@@ -196,7 +224,7 @@ export default {
       console.log(delData);
       if (!(delData == false)) {
         axios
-          .get("/api/aircompany/DeleteAirCompany", {
+          .get("/api/AirCity/DeleteAirports", {
             params: {
               info: delData + ""
             }
@@ -298,7 +326,7 @@ export default {
 </script>
 
 <style lang="scss">
-.zl-airManage {
+.zl-cityManage {
   .el-dialog__body .el-input--suffix .el-input__inner {
     margin-top: 10px;
     margin-bottom: 10px;
