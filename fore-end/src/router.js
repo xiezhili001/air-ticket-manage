@@ -7,9 +7,11 @@ export default new Router({
   // base: process.env.BASE_URL,
   routes: [{
       path: '/home',
-      name: 'home',
       component: () => import('./views/Home.vue'),
-      children: [{
+      children: [ {
+        path: '/',
+        redirect: '/sysUser'
+      },{
           path: 'sysUser',
           name: 'sysUser',
           component: () => import('./views/main/sysUser.vue'),
@@ -69,19 +71,19 @@ export default new Router({
           path: 'ticketOrder',
           name: 'ticketOrder',
           component: () => import('./views/main/ticketOrder.vue'),
-        },{
+        }, {
           path: 'cityMangae',
           name: 'cityMangae',
           component: () => import('./views/main/cityMangae.vue'),
-        },{
+        }, {
           path: 'countryManage',
           name: 'countryManage',
           component: () => import('./views/main/countryManage.vue'),
-        },{
+        }, {
           path: 'webSiteManage',
           name: 'webSiteManage',
           component: () => import('./views/main/webSiteManage.vue'),
-        },
+        }
       ]
     },
     {

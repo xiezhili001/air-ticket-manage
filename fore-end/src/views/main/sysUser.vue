@@ -55,7 +55,7 @@
   </div>
 </template>
 <script>
-import axios from "axios";
+import axios from "../../static/axios.js";
 export default {
   name: "sysUser",
   data() {

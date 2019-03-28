@@ -22,26 +22,38 @@ export default {
       userName: "",
       password: "",
       load: false,
-      state: "登录"
+      state: "登录",
+      returnPath: ''
     };
   },
   methods: {
     login() {
+      var that = this;
       this.load = true;
       this.state = "登录中";
       axios
         .get("/api/user/login", {
           params: {
-            userName: 'admin ',
-            password: '123456'
+            userName: that.userName,
+            password: that.password
           }
         })
         .then(function(response) {
-          console.log(response);
+          that.load = false;
+          if(that.returnPath) {
+            localtion.href = 'that.returnPath';
+          }else {
+          that.$router.push({name: 'sysUser'})
+          }
         })
         .catch(function(error) {
           console.log(error);
         });
+    }
+  },
+  created() {
+    if(this.$route.params.returnPath) {
+      this.returnPath = this.$route.params.returnPath;
     }
   }
 };
