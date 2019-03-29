@@ -23,10 +23,17 @@ export default {
       password: "",
       load: false,
       state: "登录",
-      returnPath: ''
+      returnPath: ""
     };
   },
   methods: {
+    messagetips(message, type) {
+      this.$message({
+        duration: 1000,
+        message: message,
+        type: type
+      });
+    },
     login() {
       var that = this;
       this.load = true;
@@ -34,16 +41,24 @@ export default {
       axios
         .get("/api/user/login", {
           params: {
-            userName: that.userName,
-            password: that.password
+            userName: that.userName, //admin
+            password: that.password //123456
           }
         })
         .then(function(response) {
-          that.load = false;
-          if(that.returnPath) {
-            localtion.href = 'that.returnPath';
+          console.log(response);
+          if (response.data.Errcode == 0) {
+            localStorage.setItem("token", response.data.Message);
+            console.log(response);
+            that.load = false;
+            if (that.returnPath) {
+              location.href = that.returnPath;
+            } else {
+              that.$router.push({ name: "sysUser" });
+            }
           }else {
-          that.$router.push({name: 'sysUser'})
+            that.messagetips(response.data.Message, 'warning');
+            that.load = false;
           }
         })
         .catch(function(error) {
@@ -52,7 +67,7 @@ export default {
     }
   },
   created() {
-    if(this.$route.params.returnPath) {
+    if (this.$route.params.returnPath) {
       this.returnPath = this.$route.params.returnPath;
     }
   }

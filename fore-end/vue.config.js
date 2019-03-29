@@ -59,7 +59,7 @@ module.exports = {
     // proxy: 'http://localhost:4000' // 配置跨域处理,只有一个代理
     proxy: {
         '/api': {
-            target: 'http://192.168.2.40:8085',
+            target: 'http://jtd.belltrip.cn',
             ws: true,
             changeOrigin: true
         }
