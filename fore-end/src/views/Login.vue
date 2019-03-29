@@ -35,41 +35,52 @@ export default {
       });
     },
     login() {
-      var that = this;
-      this.load = true;
-      this.state = "登录中";
-      axios
-        .get("/api/user/login", {
-          params: {
-            userName: that.userName, //admin
-            password: that.password //123456
-          }
-        })
-        .then(function(response) {
-          console.log(response);
-          if (response.data.Errcode == 0) {
-            localStorage.setItem("token", response.data.Message);
-            console.log(response);
-            that.load = false;
-            if (that.returnPath) {
-              location.href = that.returnPath;
-            } else {
-              that.$router.push({ name: "sysUser" });
+      if (this.userName && this.password) {
+        var that = this;
+        this.load = true;
+        this.state = "登录中";
+        axios
+          .get("/api/user/login", {
+            params: {
+              userName: that.userName, //admin
+              password: that.password //123456
             }
-          }else {
-            that.messagetips(response.data.Message, 'warning');
-            that.load = false;
-          }
-        })
-        .catch(function(error) {
-          console.log(error);
-        });
+          })
+          .then(function(response) {
+            if (response.data.Errcode == 0) {
+              localStorage.setItem("token", response.data.Message);
+              console.log(response);
+              that.load = false;
+              if (that.returnPath) {
+                location.href = that.returnPath;
+              } else {
+                that.$router.push({ name: "sysUser" });
+              }
+            } else {
+              that.messagetips(response.data.Message, "warning");
+              that.load = false;
+            }
+          })
+          .catch(function(error) {
+            console.log(error);
+          });
+      } else {
+        this.messagetips("请输入用户名或密码", "warning");
+      }
     }
   },
   created() {
     if (this.$route.params.returnPath) {
       this.returnPath = this.$route.params.returnPath;
     }
+  },
+  mounted() {
+    var that = this
+    document.querySelector('input[type="password"]').onkeydown = function(e) {
+      if(e.key == 'Enter') {
+        that.login();
+      }
+    };
   }
 };
 </script>

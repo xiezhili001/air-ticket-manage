@@ -8,6 +8,7 @@
           <span style="display: inline-block;">
             <SetPassword></SetPassword>
           </span>
+          <span style="color: #3a8ee6; cursor: pointer; margin-left: 5px" @click="dropOut">退出</span>
         </div>
       </el-header>
 
@@ -18,7 +19,7 @@
             <i :class="[iconToggle,'iconStyle']" @click="hideMenu"></i>
           </div>
 
-          <el-collapse accordion class="menu-list">
+          <el-collapse accordion class="menu-list" v-model="activeNames">
             <el-collapse-item title="设置" name="1">
               <el-card class="box-card">
                 <div
@@ -68,7 +69,8 @@ export default {
   },
   data() {
     return {
-      isActive: '',
+      activeNames: "2",
+      isActive: "",
       setList: [
         {
           name: "网站管理",
@@ -167,10 +169,23 @@ export default {
   computed: {
     highLight(id) {
       console.log(id);
-      return 'sfsf'
+      return "sfsf";
     }
   },
   methods: {
+    // 退出
+    dropOut() {
+      this.$confirm("确认退出?", "", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          localStorage.removeItem("token");
+          this.$router.push({name: 'login'});
+        })
+        .catch(() => {});
+    },
     // 切换菜单隐藏
     hideMenu() {
       var space = null;
@@ -242,10 +257,13 @@ export default {
     },
     // main 页面跳转
     goDetail(id) {
-      this.isActive =id;
+      this.isActive = id;
       this.$router.push({ name: id });
     }
   },
+  created() {
+    this.isActive = this.$route.name;
+  }
 };
 </script>
 
@@ -254,7 +272,7 @@ export default {
   height: 100%;
   font-size: 16px;
   .isActive {
-    color : #66b1ff;
+    color: #66b1ff;
   }
   .list-content {
     cursor: pointer;

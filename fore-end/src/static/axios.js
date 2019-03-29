@@ -38,7 +38,6 @@ instance.interceptors.request.use(
 instance.interceptors.response.use(
   response => {
     // console.log('请求被服务器发送回来，之后，并且是在.then 之前')
-    console.log(response.data.Errcode);
     if(response.data.Errcode == 888) {
       router.push({name: 'login', params:{
         returnPath: location.href,

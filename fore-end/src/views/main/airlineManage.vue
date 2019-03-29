@@ -174,14 +174,19 @@ export default {
           }
         })
         .catch(function(error) {
+          console.log(error);
         });
     },
     // 航司的下拉信息
     GetAirWebsiteData() {
+      console.log(1);
       var that = this;
       axios
-        .get("/api/AirLine/GetAirWebsiteData?str1=", {})
+        .get("/api/AirLine/GetAirWebsiteData?str1=", {
+          params:{}
+        })
         .then(function(response) {
+          console.log(response);
           if (response.data.Errcode == 0) {
             that.selectCNName = response.data.Data.list;
           } else {
@@ -189,7 +194,8 @@ export default {
           }
         })
         .catch(function(error) {
-          that.messagetips("网络异常，请稍后重试", "warning");
+          console.log(error);
+          that.messagetips('sdf');
         });
     },
     // 消息提示
