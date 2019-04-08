@@ -152,6 +152,10 @@ export default {
         {
           name: "汇率管理",
           id: "ExchangeRateManager"
+        },
+        {
+          name: "机票价格比值配置",
+          id: "PTPConfig"
         }
       ],
       manageList: [

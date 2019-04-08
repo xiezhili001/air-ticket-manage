@@ -27,6 +27,11 @@ export default new Router({
           component: () => import('./views/main/structure.vue'),
         },
         {
+          path: 'PTPConfig',
+          name: 'PTPConfig',
+          component: () => import('./views/main/PTPConfig.vue'),
+        },
+        {
           path: 'airCompanyManage',
           name: 'airCompanyManage',
           component: () => import('./views/main/airCompanyManage.vue'),
