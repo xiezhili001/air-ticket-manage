@@ -49,6 +49,7 @@ export default {
           .then(function(response) {
             if (response.data.Errcode == 0) {
               localStorage.setItem("token", response.data.Message);
+              localStorage.setItem("username", response.data.Data);
               console.log(response);
               that.load = false;
               if (that.returnPath) {

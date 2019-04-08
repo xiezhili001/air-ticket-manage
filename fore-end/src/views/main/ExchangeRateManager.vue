@@ -1,10 +1,10 @@
 <template>
   <div style="height: 100%" class="zl-countryManage" v-loading="loading">
     <div class="header">
-      中文名称:
-      <input type="text" v-model="name">
-      &nbsp;编码:
-      <input type="text" v-model="code">
+      币种:
+      <input type="text" v-model="currency">
+      &nbsp;转换结果币种:
+      <input type="text" v-model="currencyres">
       &nbsp;
       <el-button type="primary" @click="query">查询</el-button>
       <el-button type="success" @click="insert">新增</el-button>
@@ -20,10 +20,12 @@
         @selection-change="handleSelectionChange"
       >
         <el-table-column type="selection" width="55"></el-table-column>
-        <el-table-column label="编码" prop="CountryCode"></el-table-column>
-        <el-table-column prop="CountryName" label="中文名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="CountryEnName" label="英文名称"></el-table-column>
-        <el-table-column prop="LastUpdateTimeStamp" label="更新时间" show-overflow-tooltip></el-table-column>
+        <el-table-column label="网站ID" prop="WebsiteID"></el-table-column>
+        <el-table-column prop="Currency" label="币种" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="CurrencyRes" label="转换结果币种"></el-table-column>
+        <el-table-column prop="ExchangeRate" label="当前价格"></el-table-column>
+        <el-table-column prop="LastUpdateAdmin" label="管理员姓名"></el-table-column>
+        <el-table-column prop="LastUpdateTime" label="更新时间" show-overflow-tooltip></el-table-column>
         <el-table-column prop="Remark" label="备注" show-overflow-tooltip></el-table-column>
         <el-table-column label="操作" show-overflow-tooltip>
           <template slot-scope="scope">
@@ -34,11 +36,11 @@
     </div>
 
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-      <el-input placeholder="请输入国家编码" v-model="CountryCode" clearable :disabled="disabled"></el-input>
-      <el-input placeholder="请输入国家名称" v-model="CountryName" clearable></el-input>
-      <el-input placeholder="请输入英文名称" v-model="CountryEnName" clearable></el-input>
-      <el-input placeholder="请输入Directory" v-model="Directory " clearable></el-input>
-      <el-input placeholder="请输入ICAOCountryCode" v-model="ICAOCountryCode " clearable></el-input>
+      <el-input placeholder="请输入国家币种" v-model="Currency" clearable></el-input>
+      <el-input placeholder="请输入转换结果币种" v-model="CurrencyRes" clearable></el-input>
+      <el-input placeholder="请输入当前价格" v-model="ExchangeRate" clearable></el-input>
+      <el-input placeholder="请输入网站ID" v-model="WebsiteID" clearable></el-input>
+      <el-input placeholder="请输入管理员姓名" v-model="LastUpdateAdmin" clearable></el-input>
       <el-input placeholder="备注" v-model="Remark" clearable></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -69,8 +71,8 @@ export default {
       loading: false,
       disabled: false,
       title: "新增数据",
-      name: "",
-      code: "",
+      currency: "",
+      currencyres: "",
       tableData3: [],
       multipleSelection: [],
       dialogVisible: false,
@@ -79,11 +81,11 @@ export default {
       pagesize: 10,
       total: 1,
 
-      CountryCode: "",
-      CountryEnName: "",
-      Directory: "",
-      CountryName: "",
-      ICAOCountryCode: "",
+      Currency: "",
+      CurrencyRes: "",
+      ExchangeRate: "",
+      WebsiteID: "",
+      LastUpdateAdmin: "",
       Remark: "",
       insertId: ""
     };
@@ -104,12 +106,12 @@ export default {
       this.title = "新增数据";
       this.dialogVisible = true;
       this.insertId = "";
-      this.CountryCode = "";
-      this.CountryEnName = "";
-      this.Directory = "";
-      this.CountryName = "";
+      this.Currency = "";
+      this.CurrencyRes = "";
+      this.ExchangeRate = "";
+      this.WebsiteID = "";
       this.Remark = "";
-      this.ICAOCountryCode = "";
+      this.LastUpdateAdmin = "";
     },
     // 修改数据
     fixData(row) {
@@ -117,12 +119,12 @@ export default {
       this.title = "修改数据";
       this.dialogVisible = true;
       this.insertId = row.ID;
-      this.CountryCode = row.CountryCode;
-      this.CountryEnName = row.CountryEnName;
-      this.Directory = row.Directory;
-      this.CountryName = row.CountryName;
+      this.Currency = row.Currency;
+      this.CurrencyRes = row.CurrencyRes;
+      this.ExchangeRate = row.ExchangeRate;
+      this.WebsiteID = row.WebsiteID;
       this.Remark = row.Remark;
-      this.ICAOCountryCode = row.ICAOCountryCode;
+      this.LastUpdateAdmin = row.LastUpdateAdmin;
     },
     // 提交新增与修改
     confirm() {
@@ -130,20 +132,20 @@ export default {
       if (!(this.disabled == false)) {
         //修改----------------------------------------------
         var obj = {
-          CountryCode: that.CountryCode,
-          CountryEnName: that.CountryEnName,
-          Directory: that.Directory,
-          CountryName: that.CountryName,
-          ICAOCountryCode: that.ICAOCountryCode,
+          Currency: that.Currency,
+          CurrencyRes: that.CurrencyRes,
+          ExchangeRate: that.ExchangeRate,
+          WebsiteID: that.WebsiteID,
+          LastUpdateAdmin: that.LastUpdateAdmin,
           Remark: that.Remark,
           ID: that.insertId
         };
         var arr = [];
         arr.push(obj);
         axios
-          .get("/api/AirCountry/UpdateAirCountryInfo", {
+          .get("/api/ExchangeRateManager/UpdateRateInfo", {
             params: {
-              updateCountryInfo: obj
+              updateRateInfo: obj
             }
           })
           .then(function(response) {
@@ -160,19 +162,19 @@ export default {
       } else {
         // 新增-----------------------------------------------
         var obj = {
-          CountryCode: that.CountryCode,
-          CountryEnName: that.CountryEnName,
-          Directory: that.Directory,
-          CountryName: that.CountryName,
+          Currency: that.Currency,
+          CurrencyRes: that.CurrencyRes,
+          ExchangeRate: that.ExchangeRate,
+          WebsiteID: that.WebsiteID,
           Remark: that.Remark,
-          ICAOCountryCode: that.ICAOCountryCode
+          LastUpdateAdmin: that.LastUpdateAdmin
         };
         var arr = [];
         arr.push(obj);
         axios
-          .get("/api/AirCountry/AddAirCountryInfo", {
+          .get("/api/ExchangeRateManager/AddRateInfo", {
             params: {
-              addCountryInfo: obj
+              addRateInfo: obj
             }
           })
           .then(function(response) {
@@ -203,7 +205,7 @@ export default {
         .then(() => {
           if (!(delData == false)) {
             axios
-              .get("/api/AirCountry/DeleteAirCountry", {
+              .get("/api/ExchangeRateManager/DeleteRateInfo", {
                 params: {
                   info: delData + ""
                 }
@@ -219,7 +221,6 @@ export default {
               .catch(function(error) {
                 that.messagetips("网络异常，请稍后重试", "warning");
               });
-          } else {
           }
         })
         .catch(() => {
@@ -272,24 +273,21 @@ export default {
       var that = this;
       this.loading = true;
       axios
-        .get("/api/AirCountry/GetAirCountryList", {
+        .get("/api/ExchangeRateManager/GetAirCityList", {
           params: {
             page: that.page,
             pagesize: that.pagesize,
-            countryname: that.name,
-            countrycode: that.code
+            currency: that.currency,
+            currencyres: that.currencyres
           }
         })
         .then(function(response) {
           console.log(response);
           var data = response.data.Data.list;
-          data = data.map(item => {
-            var time = new Date(parseInt(item.LastUpdateTimeStamp));
-            var timeTrans = that.dateToString(time);
-            item.LastUpdateTimeStamp = timeTrans;
-            return item;
+          that.tableData3 = data.map(function(item) {
+            item.LastUpdateTime = item.LastUpdateTime.split('T')[0];
+            return item
           });
-          that.tableData3 = data;
           that.total = response.data.Data.total;
           that.loading = false;
         })

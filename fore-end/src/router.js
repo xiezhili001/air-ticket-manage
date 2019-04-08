@@ -83,6 +83,11 @@ export default new Router({
           path: 'webSiteManage',
           name: 'webSiteManage',
           component: () => import('./views/main/webSiteManage.vue'),
+        },
+        {
+          path: 'ExchangeRateManager',
+          name: 'ExchangeRateManager',
+          component: () => import('./views/main/ExchangeRateManager.vue'),
         }
       ]
     },

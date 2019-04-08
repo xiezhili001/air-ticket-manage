@@ -35,17 +35,17 @@
 
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
       <el-input placeholder="请输入编码" v-model="CityCode" clearable :disabled="disabled"></el-input>
-       <el-input placeholder="请输入城市名称" v-model="CityName" clearable></el-input>
+      <el-input placeholder="请输入城市名称" v-model="CityName" clearable></el-input>
       <el-input placeholder="请输入英文名称" v-model="CityEnName" clearable></el-input>
       <el-input placeholder="请输入省份ID" v-model="ProvinceID" clearable></el-input>
       <el-select v-model="CountryID" filterable placeholder="请选择国家">
-    <el-option
-      v-for="item in CountryIDSlect"
-      :key="item.ID"
-      :label="item.CountryName"
-      :value="item.ID">
-    </el-option>
-  </el-select>
+        <el-option
+          v-for="item in CountryIDSlect"
+          :key="item.ID"
+          :label="item.CountryName"
+          :value="item.ID"
+        ></el-option>
+      </el-select>
       <el-input placeholder="备注" v-model="Remark" clearable></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -73,7 +73,7 @@ export default {
   name: "airCompanyManage",
   data() {
     return {
-      CountryIDSlect: '',
+      CountryIDSlect: "",
       loading: false,
       disabled: false,
       title: "新增数据",
@@ -102,19 +102,16 @@ export default {
     GetAirCountryList() {
       var that = this;
       axios
-          .get("/api/AirCity/GetAirCountryList?str=", {
-
-          })
-          .then(function(response) {
-            if (response.data.Errcode == 0) {
-              console.log(response.data.Data);
-              that.CountryIDSlect = response.data.Data.list
-            } else {
-              that.messagetips(response.data.Message, "warning");
-            }
-          })
-          .catch(function(error) {
-          });
+        .get("/api/AirCity/GetAirCountryList?str=", {})
+        .then(function(response) {
+          if (response.data.Errcode == 0) {
+            console.log(response.data.Data);
+            that.CountryIDSlect = response.data.Data.list;
+          } else {
+            that.messagetips(response.data.Message, "warning");
+          }
+        })
+        .catch(function(error) {});
     },
     // 消息提示
     messagetips(message, type) {
@@ -223,26 +220,36 @@ export default {
         return item.ID;
       });
       console.log(delData);
-      if (!(delData == false)) {
-        axios
-          .get("/api/AirCity/DeleteAirports", {
-            params: {
-              info: delData + ""
-            }
-          })
-          .then(function(response) {
-            if (response.data.Errcode == 0) {
-              that.messagetips("删除成功", "success");
-              that.getData();
-            } else {
-              that.messagetips(response.data.Message, "warning");
-            }
-          })
-          .catch(function(error) {
-            that.messagetips("网络异常，请稍后重试", "warning");
-          });
-      } else {
-      }
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          if (!(delData == false)) {
+            axios
+              .get("/api/AirCity/DeleteAirports", {
+                params: {
+                  info: delData + ""
+                }
+              })
+              .then(function(response) {
+                if (response.data.Errcode == 0) {
+                  that.messagetips("删除成功", "success");
+                  that.getData();
+                } else {
+                  that.messagetips(response.data.Message, "warning");
+                }
+              })
+              .catch(function(error) {
+                that.messagetips("网络异常，请稍后重试", "warning");
+              });
+          } else {
+          }
+        })
+        .catch(() => {
+          that.messagetips("取消删除", "info");
+        });
     },
     // 表格
     toggleSelection(rows) {

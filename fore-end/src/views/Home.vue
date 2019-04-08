@@ -4,7 +4,7 @@
       <el-header style="height: 42px">
         <div class="fl tag">JTD.Admin</div>
         <div class="fr user">
-          <span>匡珈萱，您好,欢迎登录</span>&nbsp;
+          <span>{{user}} 您好,欢迎登录</span>&nbsp;
           <span style="display: inline-block;">
             <SetPassword></SetPassword>
           </span>
@@ -69,6 +69,7 @@ export default {
   },
   data() {
     return {
+      user: '',
       activeNames: "2",
       isActive: "",
       setList: [
@@ -147,6 +148,10 @@ export default {
         {
           name: "国家管理",
           id: "countryManage"
+        },
+        {
+          name: "汇率管理",
+          id: "ExchangeRateManager"
         }
       ],
       manageList: [
@@ -167,10 +172,7 @@ export default {
     };
   },
   computed: {
-    highLight(id) {
-      console.log(id);
-      return "sfsf";
-    }
+
   },
   methods: {
     // 退出
@@ -263,6 +265,9 @@ export default {
   },
   created() {
     this.isActive = this.$route.name;
+    if(localStorage.getItem('username')) {
+      this.user = localStorage.getItem('username');
+    }
   }
 };
 </script>

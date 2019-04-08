@@ -197,7 +197,12 @@ export default {
         return item.ID;
       });
       console.log(delData);
-      if (!(delData == false)) {
+      this.$confirm('此操作将永久删除该文件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          if (!(delData == false)) {
         axios
           .get("/api/aircompany/DeleteAirCompany", {
             params: {
@@ -217,6 +222,10 @@ export default {
           });
       } else {
       }
+        }).catch(() => {
+          that.messagetips("取消删除", "info");
+        });
+
     },
     // 表格
     toggleSelection(rows) {

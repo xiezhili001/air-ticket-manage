@@ -22,7 +22,7 @@
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column label="编码" prop="AirlineCode" width="60"></el-table-column>
         <el-table-column prop="CNName" label="航司名称" width="auto"></el-table-column>
-        <el-table-column prop="Hot" label="hot" width="60" ></el-table-column>
+        <el-table-column prop="Hot" label="hot" width="60"></el-table-column>
         <el-table-column prop="TicketCode" label="TicketCode" show-overflow-tooltip></el-table-column>
         <el-table-column prop="Website" label="网站地址" min-width="150" show-overflow-tooltip></el-table-column>
         <el-table-column prop="LastUpdateTimeStamp" label="更新时间" show-overflow-tooltip></el-table-column>
@@ -195,26 +195,36 @@ export default {
         return item.ID;
       });
       console.log(delData);
-      if (!(delData == false)) {
-        axios
-          .get("/api/AirWebsite/DeleteAirWebsiteInfo", {
-            params: {
-              info: delData + ""
-            }
-          })
-          .then(function(response) {
-            if (response.data.Errcode == 0) {
-              that.messagetips("删除成功", "success");
-              that.getData();
-            } else {
-              that.messagetips(response.data.Message, "warning");
-            }
-          })
-          .catch(function(error) {
-            that.messagetips("网络异常，请稍后重试", "warning");
-          });
-      } else {
-      }
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          if (!(delData == false)) {
+            axios
+              .get("/api/AirWebsite/DeleteAirWebsiteInfo", {
+                params: {
+                  info: delData + ""
+                }
+              })
+              .then(function(response) {
+                if (response.data.Errcode == 0) {
+                  that.messagetips("删除成功", "success");
+                  that.getData();
+                } else {
+                  that.messagetips(response.data.Message, "warning");
+                }
+              })
+              .catch(function(error) {
+                that.messagetips("网络异常，请稍后重试", "warning");
+              });
+          } else {
+          }
+        })
+        .catch(() => {
+          that.messagetips("取消删除", "info");
+        });
     },
     // 表格
     toggleSelection(rows) {
