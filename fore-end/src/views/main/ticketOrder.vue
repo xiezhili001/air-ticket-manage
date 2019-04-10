@@ -52,24 +52,28 @@
         <el-table-column prop="OtherOrderID" label="第三方订单" show-overflow-tooltip></el-table-column>
         <el-table-column width="80" prop="Paytype" label="支付类型" show-overflow-tooltip></el-table-column>
         <el-table-column width="80" prop="Paystatus" label="支付状态" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="TotalPrice" label="订单支付总金额" show-overflow-tooltip></el-table-column>
+        <el-table-column width="80" prop="TotalPrice" label="总金额" show-overflow-tooltip></el-table-column>
         <el-table-column width="80" prop="ActualPrice" label="实际价格" show-overflow-tooltip></el-table-column>
         <el-table-column width="70" prop="Tax" label="税收" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="Name" label="联系人名字" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="Mobile" label="联系人手机号码" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="Name" label="联系人" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="Mobile" label="手机号码" show-overflow-tooltip></el-table-column>
         <el-table-column width="80" prop="PassengerCount" label="乘机人数" show-overflow-tooltip></el-table-column>
         <el-table-column width="80" prop="Remark" label="备注" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="Addtime" label="记录时间" show-overflow-tooltip></el-table-column>
-        <el-table-column label="操作" show-overflow-tooltip>
+        <el-table-column prop="Addtime" label="下单时间" show-overflow-tooltip></el-table-column>
+        <el-table-column label="操作" show-overflow-tooltip width="130">
           <template slot-scope="scope">
-            <div style="color:#409EFF;cursor:pointer;font-size:15px" @click="fixData(scope.row)">修改</div>
+            <div class="operation" @click="fixData(scope.row)">修改</div>&nbsp;
+            <div class="operation" @click="showDetail(scope.row)">查看详情</div>
           </template>
         </el-table-column>
       </el-table>
     </div>
 
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      订单ID
       <el-input placeholder="订单ID" v-model="id" clearable :disabled="disabled"></el-input>
+      支付类型
+      <br>
       <el-select v-model="paytype" placeholder="请选择">
         <el-option
           v-for="item in paytypeOption"
@@ -78,6 +82,9 @@
           :value="item.value"
         ></el-option>
       </el-select>
+      <br>
+      支付状态
+      <br>
       <el-select v-model="paystatus" placeholder="请选择">
         <el-option
           v-for="item in paystatusOption"
@@ -86,12 +93,54 @@
           :value="item.value"
         ></el-option>
       </el-select>
+      <br>
+      支付成功的code
       <el-input placeholder="请输入支付成功的code" v-model="paycode " clearable v-show="paystatus == 1"></el-input>
+      备注
       <el-input placeholder="备注" v-model="remark" clearable></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
         <el-button type="primary" @click="dialogVisible = false; confirm()">确 定</el-button>
       </span>
+    </el-dialog>
+
+    <el-dialog title="订单详情" :visible.sync="detailSwitch">
+      <div style="font-size:16px;color: #000;margin: 5px 0">行程</div>
+      <el-table :data="trip">
+        <el-table-column property="Carrier" label="航司" width="50"></el-table-column>
+        <el-table-column property="DepAirport" label="出发地" width="80"></el-table-column>
+        <el-table-column property="ArrAirport" label="目的地" width="80"></el-table-column>
+        <el-table-column property="DepTime" label="出发时间"></el-table-column>
+        <el-table-column property="ArrTime" label="到达时间"></el-table-column>
+        <el-table-column property="Cabin" label="舱位" width="60"></el-table-column>
+        <el-table-column property="FlightNumber" label="飞机编号"></el-table-column>
+      </el-table>
+      <div style="font-size:16px;color: #000;margin: 5px 0">乘机人</div>
+      <el-table :data="passenger">
+        <el-table-column property="Name" label="名字"></el-table-column>
+        <el-table-column property="AgeType" label="类型"
+        width="50"></el-table-column>
+        <el-table-column width="50" property="Gender" label="性别"></el-table-column>
+        <el-table-column property="Birthday" label="生日"></el-table-column>
+        <el-table-column property="CardNum" label="证件号"></el-table-column>
+        <el-table-column property="CardType" label="证件类型"  width="80"></el-table-column>
+        <el-table-column property="CardIssuePlace" label="证件发行国家"></el-table-column>
+        <el-table-column property="CardExpired" label="证件有效时间"></el-table-column>
+        <el-table-column property="Nationality" label="国籍"  width="50"></el-table-column>
+        <el-table-column property="FFPCardNo" label="常旅客NO"></el-table-column>
+        <el-table-column property="FFPCarrier" label="常旅客卡航司"></el-table-column>
+      </el-table>
+      <div style="font-size:16px;color: #000;margin: 5px 0">行李信息</div>
+      <el-table :data="luggage">
+        <el-table-column property="Name" label="姓名"></el-table-column>
+        <el-table-column property="Flight" label="航班"></el-table-column>
+        <el-table-column property="FromAirport" label="出发地"></el-table-column>
+        <el-table-column property="ToAirport" label="到达地"></el-table-column>
+        <el-table-column property="Weight" label="weight"></el-table-column>
+        <el-table-column property="BookSalePrice" label="bookSalePrice"></el-table-column>
+        <el-table-column property="TicketSalePrice" label="ticketSalePrice"></el-table-column>
+        <el-table-column property="RefundFee" label="RefundFee"></el-table-column>
+      </el-table>
     </el-dialog>
 
     <div class="block paging">
@@ -132,6 +181,11 @@ export default {
       mobile: "",
       payType: -100,
       payStatus: -100,
+
+      detailSwitch: false,
+      trip: [],
+      passenger: [],
+      luggage: [],
 
       payTypeOption: [
         {
@@ -223,6 +277,33 @@ export default {
   },
 
   methods: {
+    // 展示详细信息
+    showDetail(row) {
+      var that = this;
+      this.detailSwitch = true;
+      axios
+        .get("/api/PlaneTicketOrder/GetTicketOrderDetail", {
+          params: {
+            id: row.ID
+          }
+        })
+        .then(function(response) {
+          console.log(response);
+          if (response.data.Errcode == 0) {
+            var data = response.data.Data;
+            that.luggage = data.luggage;
+            that.trip = data.trip;
+            that.passenger = data.passenger.map(function(item) {
+              item.Gender = item.Gender == 'M' ? '男' : '女';
+              item.AgeType = item.AgeType == '0' ? '成人' : item.AgeType == '1' ? '儿童' : '婴儿';
+              return item
+            });
+          }
+        })
+        .catch(function(error) {
+          console.log(error);
+        });
+    },
     // 消息提示
     messagetips(message, type) {
       this.$message({
@@ -248,7 +329,7 @@ export default {
       var that = this;
       if (!(this.disabled == false)) {
         //修改----------------------------------------------
-        if (that.paycode == '' && that.paystatus == 1) {
+        if (that.paycode == "" && that.paystatus == 1) {
           that.dialogVisible = true;
           that.messagetips("请输入成功的code", "warning");
           return;
@@ -343,11 +424,11 @@ export default {
           if (response.data.Errcode == 0) {
             var data = response.data.Data.list;
             data = data.map(function(item) {
-              item.Addtime = item.Addtime.split("T")[0];
+              item.Addtime = item.Addtime.split("T").join(" ");
               item.CID =
                 item.CID == "7B139F27460F4D689234241EB4193586"
                   ? "携程"
-                  : item.CID == "5E177EDB5F484565B533CE011E3DC44A"
+                  : item.CID == "5E177EDB5F484565B533"
                   ? "去哪儿"
                   : "其它";
               item.Paystatus =
@@ -362,6 +443,9 @@ export default {
                   : item.Paytype == 1
                   ? "微信"
                   : "支付宝";
+              if (!(item.Paystatus == "支付成功")) {
+                item.Paytype = "";
+              }
               return item;
             });
             console.log(data);
@@ -387,6 +471,16 @@ export default {
 
 <style lang="scss">
 .zl-order {
+  .el-dialog {
+    width: 70%
+  }
+  .operation {
+    display: inline-block;
+    color: #409eff;
+    cursor: pointer;
+    font-size: 15px;
+    text-align: center;
+  }
   .el-dialog__body .el-input--suffix .el-input__inner {
     margin-top: 10px;
     margin-bottom: 10px;

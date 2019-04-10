@@ -44,6 +44,7 @@
     </div>
 
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      航司<br>
       <el-select v-model="CNName" filterable placeholder="请选择航司">
         <el-option
           v-for="item in selectCNName"
@@ -52,6 +53,8 @@
           :value="item.ID"
         ></el-option>
       </el-select>
+      <br>
+      出发城市
       <br>
       <el-select
         v-model="SGNAPCityName"
@@ -70,6 +73,8 @@
         ></el-option>
       </el-select>
       <br>
+      目标城市
+      <br>
       <el-select
         v-model="HANAPCityName"
         filterable
@@ -86,7 +91,8 @@
           :value="item.CityCode"
         ></el-option>
       </el-select>
-
+      <br>
+      备注
       <el-input placeholder="备注" v-model="Remark" clearable></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>

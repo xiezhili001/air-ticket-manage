@@ -38,11 +38,18 @@
     </div>
 
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      编码
       <el-input placeholder="请输入编码" v-model="APCode" clearable :disabled="disabled"></el-input>
+      航司名称
       <el-input placeholder="请输入航司名称" v-model="APName" clearable></el-input>
+      中文简称
       <el-input placeholder="请输入中文简称" v-model="APNameShort" clearable></el-input>
+      英文名称
       <el-input placeholder="请输入英文名称" v-model="APEnName" clearable></el-input>
+      英文简称
       <el-input placeholder="请输入英文简称" v-model="APEnNameShort" clearable></el-input>
+      可用
+      <br>
       <el-select v-model="IsValid" placeholder="请选择">
         <el-option
           v-for="item in options"
@@ -51,6 +58,9 @@
           :value="item.value"
         ></el-option>
       </el-select>
+      <br>
+      国际
+      <br>
       <el-select v-model="HvFlight" placeholder="请选择">
         <el-option
           v-for="item in options"
@@ -58,7 +68,8 @@
           :label="item.label"
           :value="item.value"
         ></el-option>
-      </el-select>
+      </el-select><br>
+      备注
       <el-input placeholder="备注" v-model="Remark" clearable></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>

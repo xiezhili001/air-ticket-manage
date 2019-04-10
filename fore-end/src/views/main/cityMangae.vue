@@ -34,18 +34,12 @@
     </div>
 
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
-      <el-input placeholder="请输入编码" v-model="CityCode" clearable :disabled="disabled"></el-input>
-      <el-input placeholder="请输入城市名称" v-model="CityName" clearable></el-input>
-      <el-input placeholder="请输入英文名称" v-model="CityEnName" clearable></el-input>
-      <el-input placeholder="请输入省份ID" v-model="ProvinceID" clearable></el-input>
-      <el-select v-model="CountryID" filterable placeholder="请选择国家">
-        <el-option
-          v-for="item in CountryIDSlect"
-          :key="item.ID"
-          :label="item.CountryName"
-          :value="item.ID"
-        ></el-option>
-      </el-select>
+      编码
+      <el-input placeholder="请输入编码" v-model="CityCode" clearable :disabled="disabled"></el-input>城市名称
+      <el-input placeholder="请输入城市名称" v-model="CityName" clearable></el-input>英文名称
+      <el-input placeholder="请输入英文名称" v-model="CityEnName" clearable></el-input>省份ID
+      <el-input placeholder="请输入省份ID" v-model="ProvinceID" clearable></el-input>国家ID
+      <el-input placeholder="请输入国家" v-model="CountryID" clearable></el-input>备注
       <el-input placeholder="备注" v-model="Remark" clearable></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
@@ -73,7 +67,6 @@ export default {
   name: "airCompanyManage",
   data() {
     return {
-      CountryIDSlect: "",
       loading: false,
       disabled: false,
       title: "新增数据",
@@ -98,21 +91,6 @@ export default {
   },
 
   methods: {
-    // 国家下拉数据源
-    GetAirCountryList() {
-      var that = this;
-      axios
-        .get("/api/AirCity/GetAirCountryList?str=", {})
-        .then(function(response) {
-          if (response.data.Errcode == 0) {
-            console.log(response.data.Data);
-            that.CountryIDSlect = response.data.Data.list;
-          } else {
-            that.messagetips(response.data.Message, "warning");
-          }
-        })
-        .catch(function(error) {});
-    },
     // 消息提示
     messagetips(message, type) {
       this.$message({
@@ -123,7 +101,6 @@ export default {
     },
     // 新增数据-----------------------
     insert() {
-      this.GetAirCountryList();
       this.disabled = false;
       this.title = "新增数据";
       this.dialogVisible = true;
@@ -137,7 +114,6 @@ export default {
     },
     // 修改数据
     fixData(row) {
-      this.GetAirCountryList();
       this.disabled = true;
       this.title = "修改数据";
       this.dialogVisible = true;

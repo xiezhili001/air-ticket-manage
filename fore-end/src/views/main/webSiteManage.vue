@@ -36,11 +36,17 @@
     </div>
 
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      编码
       <el-input placeholder="请输入编码" v-model="AirlineCode" clearable :disabled="disabled"></el-input>
+      航司名称
       <el-input placeholder="请输入航司名称" v-model="CNName" clearable></el-input>
+      hot
       <el-input placeholder="请输入hot" v-model="Hot" clearable></el-input>
+      TicketCode
       <el-input placeholder="请输入TicketCode" v-model="TicketCode" clearable></el-input>
+      网站地址
       <el-input placeholder="请输入网站地址" v-model="Website" clearable></el-input>
+      备注
       <el-input placeholder="备注" v-model="Remark" clearable></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>

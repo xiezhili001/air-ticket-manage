@@ -20,7 +20,22 @@
           </div>
 
           <el-collapse accordion class="menu-list" v-model="activeNames">
-            <el-collapse-item title="设置" name="1">
+
+            <el-collapse-item title="订单信息" name="1">
+              <el-card class="box-card">
+                <div
+                  v-for="item in orderList"
+                  :key="item.name"
+                  :class="['text', 'item', 'list-content', item.id == isActive ? 'isActive' : '']"
+                  @click="goDetail(item.id)"
+                >
+                  {{ item.name }}
+                  <span class="el-icon-arrow-right showDetail"></span>
+                </div>
+              </el-card>
+            </el-collapse-item>
+
+            <el-collapse-item title="系统设置" name="2">
               <el-card class="box-card">
                 <div
                   v-for="item in setList"
@@ -34,7 +49,7 @@
               </el-card>
             </el-collapse-item>
 
-            <el-collapse-item title="管理" name="2">
+            <el-collapse-item title="用户管理" name="3">
               <el-card class="box-card">
                 <div
                   v-for="item in manageList"
@@ -70,84 +85,12 @@ export default {
   data() {
     return {
       user: '',
-      activeNames: "2",
+      activeNames: "1",
       isActive: "",
-      setList: [
-        {
-          name: "网站管理",
-          id: "webSiteManage"
-        },
-        {
-          name: "航司管理",
-          id: "airCompanyManage"
-        },
-        {
-          name: "返点管理",
-          id: "backManage"
-        },
-        {
-          name: "机场管理",
-          id: "airportManage"
-        },
-        {
-          name: "航线管理",
-          id: "airlineManage"
-        },
-        {
-          name: "航司注册账号",
-          id: "registerAccount"
-        },
-        {
-          name: "平台配置",
-          id: "platformSet"
-        },
-        {
-          name: "平台上线航空配置",
-          id: "platformOnlineSet"
-        },
-        {
-          name: "税费管理",
-          id: "taxationManage"
-        },
-        {
-          name: "税费调控",
-          id: "taxationControl"
-        },
-        {
-          name: "航司积分帐号",
-          id: "integralAccount"
-        },
+      orderList: [
         {
           name: "机票订单",
           id: "ticketOrder"
-        },
-        {
-          name: "导入数据",
-          id: "importData"
-        },
-        {
-          name: "降舱数据",
-          id: "reduceData"
-        },
-        {
-          name: "退票规则",
-          id: "refundRule"
-        },
-        {
-          name: "售卖行李额设置",
-          id: "packageSet"
-        },
-        {
-          name: "平台航司代码转换",
-          id: "codeConversion"
-        },
-        {
-          name: "城市管理",
-          id: "cityMangae"
-        },
-        {
-          name: "国家管理",
-          id: "countryManage"
         },
         {
           name: "汇率管理",
@@ -158,15 +101,34 @@ export default {
           id: "PTPConfig"
         }
       ],
+      setList: [
+        {
+          name: "网站管理",
+          id: "webSiteManage"
+        },
+        {
+          name: "航司管理",
+          id: "airCompanyManage"
+        },
+
+        {
+          name: "机场管理",
+          id: "airportManage"
+        },
+        {
+          name: "航线管理",
+          id: "airlineManage"
+        },
+        {
+          name: "城市管理",
+          id: "cityMangae"
+        },
+        {
+          name: "国家管理",
+          id: "countryManage"
+        }
+      ],
       manageList: [
-        {
-          name: "组织架构",
-          id: "structure"
-        },
-        {
-          name: "系统角色",
-          id: "sysRole"
-        },
         {
           name: "系统用户",
           id: "sysUser"

@@ -6,7 +6,6 @@
       &nbsp;
       <el-button type="primary" @click="query">查询</el-button>
       <el-button type="success" @click="insert">新增</el-button>
-      <el-button type="danger" @click="del">删除</el-button>
     </div>
 
     <div class="infoList">
@@ -19,7 +18,7 @@
       >
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column label="配置key" prop="ConfigKey"></el-table-column>
-        <el-table-column prop="MarkupType" label="当前加价结果"></el-table-column>
+        <el-table-column prop="MarkupType" label="当前加价类型"></el-table-column>
         <el-table-column prop="OrdinaryMarkup" label="普通加价额度" show-overflow-tooltip></el-table-column>
         <el-table-column prop="MarkupPercentage" label="加价百分比"></el-table-column>
         <el-table-column prop="ParityDownRegulation" label="比价下调额度"></el-table-column>
@@ -159,17 +158,16 @@ export default {
     // 提交新增与修改
     confirm() {
       var that = this;
-       if (
-          isNaN(that.OnlyTicketPercentage) ||
-          isNaN(that.ParityDownRegulation)
-        ) {
-          that.dialogVisible = true;
-          that.messagetips("请输入正确的数字", "warning");
-          return;
-        }
+      if (
+        isNaN(that.OnlyTicketPercentage) ||
+        isNaN(that.ParityDownRegulation)
+      ) {
+        that.dialogVisible = true;
+        that.messagetips("请输入正确的数字", "warning");
+        return;
+      }
       if (!(this.disabled == false)) {
         //修改----------------------------------------------
-
 
         var obj = {
           ConfigKey: that.ConfigKey,
@@ -239,42 +237,42 @@ export default {
       }
     },
     // 删除数据
-    del() {
-      var that = this;
-      var delData = this.multipleSelection.map(item => {
-        return item.ID;
-      });
-      console.log(delData);
-      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
-        confirmButtonText: "确定",
-        cancelButtonText: "取消",
-        type: "warning"
-      })
-        .then(() => {
-          if (!(delData == false)) {
-            axios
-              .get("/api/PTPConfig/DeletePTPConfig", {
-                params: {
-                  info: delData + ""
-                }
-              })
-              .then(function(response) {
-                if (response.data.Errcode == 0) {
-                  that.messagetips("删除成功", "success");
-                  that.getData();
-                } else {
-                  that.messagetips(response.data.Message, "warning");
-                }
-              })
-              .catch(function(error) {
-                that.messagetips("网络异常，请稍后重试", "warning");
-              });
-          }
-        })
-        .catch(() => {
-          that.messagetips("取消删除", "info");
-        });
-    },
+    // del() {
+    //   var that = this;
+    //   var delData = this.multipleSelection.map(item => {
+    //     return item.ID;
+    //   });
+    //   console.log(delData);
+    //   this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+    //     confirmButtonText: "确定",
+    //     cancelButtonText: "取消",
+    //     type: "warning"
+    //   })
+    //     .then(() => {
+    //       if (!(delData == false)) {
+    //         axios
+    //           .get("/api/PTPConfig/DeletePTPConfig", {
+    //             params: {
+    //               info: delData + ""
+    //             }
+    //           })
+    //           .then(function(response) {
+    //             if (response.data.Errcode == 0) {
+    //               that.messagetips("删除成功", "success");
+    //               that.getData();
+    //             } else {
+    //               that.messagetips(response.data.Message, "warning");
+    //             }
+    //           })
+    //           .catch(function(error) {
+    //             that.messagetips("网络异常，请稍后重试", "warning");
+    //           });
+    //       }
+    //     })
+    //     .catch(() => {
+    //       that.messagetips("取消删除", "info");
+    //     });
+    // },
     // 表格
     toggleSelection(rows) {
       if (rows) {
@@ -331,14 +329,19 @@ export default {
         .then(function(response) {
           console.log(response);
           if (response.data.Errcode == 0) {
-            var data = response.data.Data.list;
-            that.tableData3 = data.map(function(item) {
-              item.LastUpdateTime = item.LastUpdateTime.split("T")[0];
-              return item;
-            });
-            that.total = response.data.Data.total;
+            that.loading = false;
+            if (response.data.Data) {
+              var data = response.data.Data.list;
+              that.tableData3 = data.map(function(item) {
+                item.LastUpdateTime = item.LastUpdateTime.split("T")[0];
+                item.MarkupType = item.MarkupType == 0 ? '普通加价额度' : '加价百分比'
+                return item;
+              });
+              that.total = response.data.Data.total;
+            }else {
+              that.tableData3 = [];
+            }
           }
-          that.loading = false;
         })
         .catch(function(error) {
           console.log(error);

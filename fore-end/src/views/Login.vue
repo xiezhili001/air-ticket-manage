@@ -55,7 +55,7 @@ export default {
               if (that.returnPath) {
                 location.href = that.returnPath;
               } else {
-                that.$router.push({ name: "sysUser" });
+                that.$router.push({ name: "ticketOrder" });
               }
             } else {
               that.messagetips(response.data.Message, "warning");

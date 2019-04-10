@@ -8,23 +8,13 @@ export default new Router({
   routes: [{
       path: '/home',
       component: () => import('./views/Home.vue'),
-      children: [ {
-        path: '/',
-        redirect: '/sysUser'
-      },{
+      children: [{
+          path: '/',
+          redirect: '/sysUser'
+        }, {
           path: 'sysUser',
           name: 'sysUser',
           component: () => import('./views/main/sysUser.vue'),
-        },
-        {
-          path: 'sysRole',
-          name: 'sysRole',
-          component: () => import('./views/main/sysRole.vue'),
-        },
-        {
-          path: 'structure',
-          name: 'structure',
-          component: () => import('./views/main/structure.vue'),
         },
         {
           path: 'PTPConfig',
@@ -37,10 +27,6 @@ export default new Router({
           component: () => import('./views/main/airCompanyManage.vue'),
         },
         {
-          path: 'backManage',
-          name: 'backManage',
-          component: () => import('./views/main/backManage.vue'),
-        }, {
           path: 'airportManage',
           name: 'airportManage',
           component: () => import('./views/main/airportManage.vue'),
@@ -48,31 +34,8 @@ export default new Router({
           path: 'airlineManage',
           name: 'airlineManage',
           component: () => import('./views/main/airlineManage.vue'),
-        }, {
-          path: 'registerAccount',
-          name: 'registerAccount',
-          component: () => import('./views/main/registerAccount.vue'),
-        }, {
-          path: 'platformSet',
-          name: 'platformSet',
-          component: () => import('./views/main/platformSet.vue'),
-        }, {
-          path: 'platformOnlineSet',
-          name: 'platformOnlineSet',
-          component: () => import('./views/main/platformOnlineSet.vue'),
-        }, {
-          path: 'taxationManage',
-          name: 'taxationManage',
-          component: () => import('./views/main/taxationManage.vue'),
-        }, {
-          path: 'taxationControl',
-          name: 'taxationControl',
-          component: () => import('./views/main/taxationControl.vue'),
-        }, {
-          path: 'integralAccount',
-          name: 'integralAccount',
-          component: () => import('./views/main/integralAccount.vue'),
-        }, {
+        },
+        {
           path: 'ticketOrder',
           name: 'ticketOrder',
           component: () => import('./views/main/ticketOrder.vue'),

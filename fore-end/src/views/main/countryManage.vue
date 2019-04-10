@@ -34,11 +34,17 @@
     </div>
 
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      国家编码
       <el-input placeholder="请输入国家编码" v-model="CountryCode" clearable :disabled="disabled"></el-input>
+      国家名称
       <el-input placeholder="请输入国家名称" v-model="CountryName" clearable></el-input>
+      英文名称
       <el-input placeholder="请输入英文名称" v-model="CountryEnName" clearable></el-input>
+      Directory
       <el-input placeholder="请输入Directory" v-model="Directory " clearable></el-input>
+      ICAOCountryCode
       <el-input placeholder="请输入ICAOCountryCode" v-model="ICAOCountryCode " clearable></el-input>
+      备注
       <el-input placeholder="备注" v-model="Remark" clearable></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>

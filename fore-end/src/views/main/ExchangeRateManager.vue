@@ -36,11 +36,17 @@
     </div>
 
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      国家币种
       <el-input placeholder="请输入国家币种" v-model="Currency" clearable></el-input>
+      转换结果币种
       <el-input placeholder="请输入转换结果币种" v-model="CurrencyRes" clearable></el-input>
+      当前价格
       <el-input placeholder="请输入当前价格" v-model="ExchangeRate" clearable></el-input>
+      网站ID
       <el-input placeholder="请输入网站ID" v-model="WebsiteID" clearable></el-input>
+      管理员姓名
       <el-input placeholder="请输入管理员姓名" v-model="LastUpdateAdmin" clearable></el-input>
+      备注
       <el-input placeholder="备注" v-model="Remark" clearable></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>

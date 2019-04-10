@@ -36,11 +36,17 @@
     </div>
 
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
+      编码
       <el-input placeholder="请输入编码" v-model="ACICAO" clearable :disabled="disabled"></el-input>
+      航司名称
       <el-input placeholder="请输入航司名称" v-model="ACName" clearable></el-input>
+      中文简称
       <el-input placeholder="请输入中文简称" v-model="ACNameShort" clearable></el-input>
+      英文名称
       <el-input placeholder="请输入英文名称" v-model="ACEnName" clearable></el-input>
+      英文简称
       <el-input placeholder="请输入英文简称" v-model="ACEnNameShort" clearable></el-input>
+      备注
       <el-input placeholder="备注" v-model="Remark" clearable></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
