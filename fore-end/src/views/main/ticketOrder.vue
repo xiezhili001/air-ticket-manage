@@ -62,7 +62,7 @@
         <el-table-column prop="Addtime" label="下单时间" show-overflow-tooltip></el-table-column>
         <el-table-column label="操作" show-overflow-tooltip width="130">
           <template slot-scope="scope">
-            <div class="operation" @click="fixData(scope.row)">修改</div>&nbsp;
+            <div class="operation" @click="fixData(scope.row)">{{scope.row.Paystatus == '待支付' ? '修改' : '查看'}}</div>&nbsp;
             <div class="operation" @click="showDetail(scope.row)">查看详情</div>
           </template>
         </el-table-column>
@@ -71,7 +71,7 @@
 
     <el-dialog :title="title" :visible.sync="dialogVisible" width="30%" :before-close="handleClose">
       订单ID
-      <el-input placeholder="订单ID" v-model="id" clearable :disabled="disabled"></el-input>
+      <el-input placeholder="订单号" v-model="OrderNo" clearable :disabled="disabled"></el-input>
       支付类型
       <br>
       <el-select v-model="paytype" placeholder="请选择">
@@ -100,7 +100,7 @@
       <el-input placeholder="备注" v-model="remark" clearable></el-input>
       <span slot="footer" class="dialog-footer">
         <el-button @click="dialogVisible = false">取 消</el-button>
-        <el-button type="primary" @click="dialogVisible = false; confirm()">确 定</el-button>
+        <el-button type="primary" v-show="confirmSwitch"  @click="dialogVisible = false; confirm()">确 定</el-button>
       </span>
     </el-dialog>
 
@@ -269,10 +269,12 @@ export default {
       ],
 
       id: "",
+      OrderNo: "",
       paytype: 1,
       paystatus: -1,
       paycode: "",
-      remark: ""
+      remark: "",
+      confirmSwitch: false
     };
   },
 
@@ -314,6 +316,11 @@ export default {
     },
     // 修改数据
     fixData(row) {
+      if(row.Paystatus == '待支付') {
+        this.confirmSwitch = true;
+      }else {
+        this.confirmSwitch = false;
+      }
       this.disabled = true;
       this.title = "修改数据";
       this.dialogVisible = true;
@@ -322,6 +329,7 @@ export default {
       this.paystatus =
         row.Paystatus == "支付成功" ? 1 : row.Paystatus == "支付失败" ? -1 : 0;
       this.paycode = row.Paycode;
+      this.OrderNo = row.OrderNo;
       this.remark = row.Remark;
     },
     // 提交新增与修改
