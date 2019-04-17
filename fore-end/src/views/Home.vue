@@ -120,6 +120,10 @@ export default {
           id: "airlineManage"
         },
         {
+          name: "航班管理",
+          id: "flightManagement"
+        },
+        {
           name: "城市管理",
           id: "cityMangae"
         },

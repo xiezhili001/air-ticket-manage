@@ -45,6 +45,7 @@
         tooltip-effect="dark"
         style="width: 100%"
         @selection-change="handleSelectionChange"
+        @row-click="showDetail"
       >
         <el-table-column type="selection" width="55"></el-table-column>
         <el-table-column width="70" show-overflow-tooltip label="渠道" prop="CID"></el-table-column>
@@ -62,8 +63,8 @@
         <el-table-column prop="Addtime" label="下单时间" show-overflow-tooltip></el-table-column>
         <el-table-column label="操作" show-overflow-tooltip width="130">
           <template slot-scope="scope">
-            <div class="operation" @click="fixData(scope.row)">{{scope.row.Paystatus == '待支付' ? '修改' : '查看'}}</div>&nbsp;
-            <div class="operation" @click="showDetail(scope.row)">查看详情</div>
+            <div class="operation" @click.stop="fixData(scope.row)">{{scope.row.Paystatus == '待支付' ? '修改' : '查看'}}</div>&nbsp;
+            <div class="operation" @click.stop="showDetail(scope.row)">查看详情</div>
           </template>
         </el-table-column>
       </el-table>
@@ -416,8 +417,6 @@ export default {
       axios
         .get("/api/PlaneTicketOrder/GetTicketOrder", {
           params: {
-            page: that.page,
-            pagesize: that.pagesize,
             page: that.page,
             pagesize: that.pagesize,
             channelID: that.channelID,

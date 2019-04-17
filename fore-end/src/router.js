@@ -56,6 +56,11 @@ export default new Router({
           path: 'ExchangeRateManager',
           name: 'ExchangeRateManager',
           component: () => import('./views/main/ExchangeRateManager.vue'),
+        },
+        {
+          path: 'flightManagement',
+          name: 'flightManagement',
+          component: () => import('./views/main/flightManagement.vue'),
         }
       ]
     },

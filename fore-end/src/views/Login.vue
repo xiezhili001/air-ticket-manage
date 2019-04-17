@@ -53,8 +53,10 @@ export default {
               console.log(response);
               that.load = false;
               if (that.returnPath) {
+                console.log(4);
                 location.href = that.returnPath;
               } else {
+                console.log(5);
                 that.$router.push({ name: "ticketOrder" });
               }
             } else {
